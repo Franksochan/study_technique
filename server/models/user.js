@@ -35,6 +35,14 @@ const UserSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Notification' 
   }],
+  followers: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }], 
+  following: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }],
   failedLoginAttempts: { type: Number, default: 0 }, 
   lockUntil: { type: Date },
   resetPasswordToken: { type: String, default: undefined},

@@ -5,8 +5,8 @@ require('dotenv').config()
 const connectDB = require('./db/connect')
 const logger = require('./logger/logger')
 
-const chatbotRoute = require('./router/chatbotRoute')
 const authRoute = require('./router/authRoute')
+const userRoute = require('./router/userRouter')
 const errorHandler = require('./middleware/errorHandler')
 
 const app = express();
@@ -24,8 +24,8 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-app.use('/chatbot', chatbotRoute)
 app.use('/auth', authRoute)
+app.use('/user', userRoute)
 
 app.use(errorHandler)
  
