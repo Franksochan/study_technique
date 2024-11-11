@@ -43,6 +43,13 @@ const UserSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }],
+  jobPosts: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Job'
+  }],
+  portfolio: [{
+    type: String
+  }], 
   failedLoginAttempts: { type: Number, default: 0 }, 
   lockUntil: { type: Date },
   resetPasswordToken: { type: String, default: undefined},

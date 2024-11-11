@@ -644,3 +644,40 @@
 2024-11-09 14:58:07 [INFO]: Server is now listening on 5000
 2024-11-09 14:58:11 [INFO]: Connected to Database
 2024-11-09 14:58:11 [INFO]: Server is now listening on 5000
+2024-11-11 14:42:07 [INFO]: Connected to Database
+2024-11-11 14:42:07 [INFO]: Server is now listening on 5000
+2024-11-11 14:42:09 [ERROR]: Error posting the job - SkillsRequired must be an array of alphanumeric strings.
+2024-11-11 14:43:13 [INFO]: User 6715ced64600f50c5c088be8 successfully posted a job
+2024-11-11 14:43:35 [INFO]: Connected to Database
+2024-11-11 14:43:35 [INFO]: Server is now listening on 5000
+2024-11-11 14:48:11 [INFO]: Connected to Database
+2024-11-11 14:48:11 [INFO]: Server is now listening on 5000
+2024-11-11 14:49:31 [INFO]: Connected to Database
+2024-11-11 14:49:31 [INFO]: Server is now listening on 5000
+2024-11-11 14:49:50 [INFO]: Connected to Database
+2024-11-11 14:49:50 [INFO]: Server is now listening on 5000
+2024-11-11 14:51:06 [INFO]: Connected to Database
+2024-11-11 14:51:06 [INFO]: Server is now listening on 5000
+2024-11-11 14:51:31 [ERROR]: Error posting the job - Missing required fields: title, description, skillsRequired, deadline, and userId are required.
+2024-11-11 14:51:52 [INFO]: Connected to Database
+2024-11-11 14:51:52 [INFO]: Server is now listening on 5000
+2024-11-11 14:51:56 [ERROR]: Error posting the job - Missing required fields: title, description, skillsRequired, deadline, and userId are required.
+2024-11-11 14:52:09 [INFO]: Connected to Database
+2024-11-11 14:52:09 [INFO]: Server is now listening on 5000
+2024-11-11 14:52:11 [INFO]: User 6715ced64600f50c5c088be8 successfully posted a job
+2024-11-11 14:57:43 [INFO]: Connected to Database
+2024-11-11 14:57:43 [INFO]: Server is now listening on 5000
+2024-11-11 14:58:58 [INFO]: Connected to Database
+2024-11-11 14:58:58 [INFO]: Server is now listening on 5000
+2024-11-11 14:59:26 [INFO]: Connected to Database
+2024-11-11 14:59:26 [INFO]: Server is now listening on 5000
+2024-11-11 14:59:34 [INFO]: Connected to Database
+2024-11-11 14:59:34 [INFO]: Server is now listening on 5000
+2024-11-11 14:59:56 [ERROR]: Error posting the job - Missing required fields: title, description, skillsRequired, deadline, and userId are required.
+2024-11-11 15:00:06 [INFO]: Connected to Database
+2024-11-11 15:00:06 [INFO]: Server is now listening on 5000
+2024-11-11 15:00:09 [ERROR]: Error posting the job - Invalid job type. Available types: Computer Science & IT, Web Design & Graphic Design, Digital Marketing & Social Media, Content Creation & Writing, Photography & Visual Arts, Virtual Assistant & Administrative Support, Transcription & Translation, Consulting & Business Strategy, Sales & Marketing, Voiceovers & Audio Production, Accounting & Financial Services, Legal & Intellectual Property Services, Event Planning & Coordination, Health, Fitness & Wellness, Education & Tutoring
+2024-11-11 15:00:23 [ERROR]: Error posting the job - Job validation failed: type: Path `type` is required.
+2024-11-11 15:00:46 [INFO]: Connected to Database
+2024-11-11 15:00:46 [INFO]: Server is now listening on 5000
+2024-11-11 15:00:49 [INFO]: User 6715ced64600f50c5c088be8 successfully posted a job

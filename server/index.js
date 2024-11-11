@@ -7,6 +7,7 @@ const logger = require('./logger/logger')
 
 const authRoute = require('./router/authRoute')
 const userRoute = require('./router/userRouter')
+const jobRoute = require('./router/jobRoute')
 const errorHandler = require('./middleware/errorHandler')
 
 const app = express();
@@ -26,6 +27,7 @@ app.use(cors(corsOptions))
 
 app.use('/auth', authRoute)
 app.use('/user', userRoute)
+app.use('/job', jobRoute)
 
 app.use(errorHandler)
  
