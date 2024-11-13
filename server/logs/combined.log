@@ -681,3 +681,36 @@
 2024-11-11 15:00:46 [INFO]: Connected to Database
 2024-11-11 15:00:46 [INFO]: Server is now listening on 5000
 2024-11-11 15:00:49 [INFO]: User 6715ced64600f50c5c088be8 successfully posted a job
+2024-11-13 14:09:41 [INFO]: Connected to Database
+2024-11-13 14:09:41 [INFO]: Server is now listening on 5000
+2024-11-13 14:11:32 [INFO]: Connected to Database
+2024-11-13 14:11:32 [INFO]: Server is now listening on 5000
+2024-11-13 14:14:28 [INFO]: Connected to Database
+2024-11-13 14:14:28 [INFO]: Server is now listening on 5000
+2024-11-13 14:14:29 [INFO]: Connected to Database
+2024-11-13 14:14:29 [INFO]: Server is now listening on 5000
+2024-11-13 14:14:52 [INFO]: Connected to Database
+2024-11-13 14:14:52 [INFO]: Server is now listening on 5000
+2024-11-13 14:19:36 [INFO]: Connected to Database
+2024-11-13 14:19:36 [INFO]: Server is now listening on 5000
+2024-11-13 14:21:25 [INFO]: Connected to Database
+2024-11-13 14:21:25 [INFO]: Server is now listening on 5000
+2024-11-13 14:21:47 [INFO]: Connected to Database
+2024-11-13 14:21:47 [INFO]: Server is now listening on 5000
+2024-11-13 14:22:59 [INFO]: Creating job with title: Web Designer need and type: Web and Graphic Designs
+2024-11-13 14:22:59 [ERROR]: Error posting the job - Invalid job type. Available types: Computer Science and IT, Web and Graphic Design, Digital Marketing and Social Media, Content Creation and Writing, Photography and Visual Arts, Virtual Assistant and Administrative Support, Transcription and Translation, Consulting and Business Strategy, Sales and Marketing, Voiceovers and Audio Production, Accounting and Financial Services, Legal and Intellectual Property Services, Event Planning and Coordination, Health, Fitness and Wellness, Education and Tutoring, School Works
+2024-11-13 14:23:12 [INFO]: Creating job with title: Web Designer and type: Web and Graphic Design
+2024-11-13 14:23:12 [INFO]: User 6715ced64600f50c5c088be8 successfully posted a job
+2024-11-13 14:24:41 [INFO]: Fetching jobs for category: Web and Graphic Design
+2024-11-13 14:25:16 [INFO]: Connected to Database
+2024-11-13 14:25:16 [INFO]: Server is now listening on 5000
+2024-11-13 14:25:18 [INFO]: 672ec61fdf1f0a72aa16e8bf deleting job: 673445d0500cc0a681c2cdc1
+2024-11-13 14:25:18 [ERROR]: Error deleting the job post - You dont have permission to delete this post
+2024-11-13 14:25:38 [INFO]: 12345 deleting job: 673445d0500cc0a681c2cdc1
+2024-11-13 14:25:38 [ERROR]: Error deleting the job post - Invalid formats.
+2024-11-13 14:26:14 [INFO]: 6715ced64600f50c5c088be8 deleting job: 673445d0500cc0a681c2cdc1
+2024-11-13 14:26:14 [ERROR]: Error deleting the job post - You dont have permission to delete this post
+2024-11-13 14:26:32 [INFO]: Connected to Database
+2024-11-13 14:26:32 [INFO]: Server is now listening on 5000
+2024-11-13 14:26:34 [INFO]: 6715ced64600f50c5c088be8 deleting job: 673445d0500cc0a681c2cdc1
+2024-11-13 14:26:34 [ERROR]: Error deleting the job post - You dont have permission to delete this post

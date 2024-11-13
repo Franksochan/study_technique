@@ -105,6 +105,45 @@ class JobService {
     // Return the jobs to the user
     return jobs
   }  
+
+  async deleteJobs(userId, jobId) {
+
+    // Check if all the required parameters are present
+    const requiredParams = { userId, jobId }
+    if (Object.values(requiredParams).some(param => param === undefined || param === null)) {
+      throw { status: 400, message: "Missing required fields" }
+    }
+
+    // Log deletion info
+    logger.info(`${userId} deleting job: ${jobId}`)
+
+    // Validate userId format if it's an ObjectId
+    if (!validator.isMongoId(userId.toString()) || !validator.isMongoId(jobId.toString())) {
+      throw { status: 400, message: "Invalid formats." }
+    }
+
+    // Query both the User and Job collections at the same time
+    const [ user, job ] = await Promise.all([
+      User.findById(userId),
+      Job.findById(jobId)
+    ])
+
+    // Check if both user and job exist
+    if (!user) {
+      throw { status: 404, message: 'User not found.' }
+    }
+    if (!job) {
+      throw { status: 404, message: 'Job not found.' }
+    }
+
+    if (job.postedBy.toString() !== user._id.toString()) {
+      throw { status: 400, message: 'You dont have permission to delete this post'}
+    }
+
+    await Job.deleteOne({ _id: jobId })
+
+    logger.info(`Job ${jobId} deleted successfully by user ${userId}`)
+  }
 }
 
 module.exports = new JobService()

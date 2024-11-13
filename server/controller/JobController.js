@@ -27,6 +27,18 @@ class JobController {
       next(error)
     }
   }
+
+  async deleteJobs(req, res, next) {
+    try {
+      const { userId, jobId } = req.params
+      await JobService.deleteJobs(userId, jobId) 
+      res.status(200).json({ message: 'Job post succesfully deleted' })
+    } catch (error) {
+      logger.error(`Error deleting the job post - ${error.message}`)
+      next(error)
+    }
+  }
+
 }
 
 module.exports = new JobController()
