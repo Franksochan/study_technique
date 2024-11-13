@@ -1,5 +1,3 @@
-// services/EmailService.js
-
 const nodemailer = require('nodemailer')
 const crypto = require('crypto')
 const logger = require('../logger/logger')
