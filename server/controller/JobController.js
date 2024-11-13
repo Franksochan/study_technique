@@ -15,6 +15,18 @@ class JobController {
       next(error)
     }
   }
+
+  async fetchJobs(req, res, next) {
+    try {
+      const { jobCategory } = req.params
+  
+      const jobs = await JobService.fetchJob(jobCategory)
+      res.status(200).json({ jobs: jobs, message: `Jobs fetched succesfully`})
+    } catch (error) {
+      logger.error(`Error fetching the jobs - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 module.exports = new JobController()

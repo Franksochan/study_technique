@@ -14,6 +14,9 @@ class JobService {
       throw { status: 400, message: "Missing required fields: title, description, skillsRequired, deadline, and userId are required." }
     }
 
+    // Log sanitized inputs (excluding sensitive data)
+    logger.info(`Creating job with title: ${title} and type: ${type}`)
+
     // Validate and sanitize each input using validator functions
 
     // Check title - validate length and sanitize
@@ -74,8 +77,34 @@ class JobService {
   }
 
   async fetchJob(jobCategory) {
-     
-  }
+
+    // Log job category being fetched
+    logger.info(`Fetching jobs for category: ${jobCategory}`)
+
+    // Check if jobCategory is a string, has a minimum length of 5, and contains only alphanumeric characters
+    if (!validator.isLength(jobCategory, { min: 5 }) || !validator.isAlphanumeric(jobCategory.replace(/\s/g, ''))) {
+      throw { status: 400, message: 'Job category must be a string with at least 5 alphanumeric characters.' };
+    }
+  
+    // Check if jobCategory exists in JOB_TYPES
+    if (!JOB_TYPES.includes(jobCategory)) {
+      throw { status: 400, message: `Invalid job category. Available categories: ${JOB_TYPES.join(', ')}` }
+    }
+
+    // Sanitize jobCategory to prevent any special characters or injection
+    jobCategory = validator.escape(jobCategory)
+
+    // Fetch jobs by category
+    const jobs = await Job.find({ type: jobCategory })
+  
+    // Check if jobs exist for the given category
+    if (!jobs || jobs.length === 0) {
+      throw { status: 400, message: 'Job category currently has no jobs' }
+    }
+  
+    // Return the jobs to the user
+    return jobs
+  }  
 }
 
 module.exports = new JobService()
