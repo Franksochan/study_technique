@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const JOB_TYPES = require('../constants/jobTypes')
 
 const JobSchema = mongoose.Schema({
   title: {
@@ -44,24 +45,7 @@ const JobSchema = mongoose.Schema({
   },
   type: {
     type: String,
-    enum: [
-      'Computer Science & IT', 
-      'Web Design & Graphic Design', 
-      'Digital Marketing & Social Media', 
-      'Content Creation & Writing', 
-      'Photography & Visual Arts', 
-      'Virtual Assistant & Administrative Support', 
-      'Transcription & Translation', 
-      'Consulting & Business Strategy', 
-      'Sales & Marketing', 
-      'Voiceovers & Audio Production', 
-      'Accounting & Financial Services',
-      'Legal & Intellectual Property Services',
-      'Event Planning & Coordination',
-      'Health, Fitness & Wellness', 
-      'Education & Tutoring',
-      'School Works'
-    ], 
+    enum: JOB_TYPES, 
     required: true, 
   }
 })

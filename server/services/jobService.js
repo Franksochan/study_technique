@@ -1,8 +1,9 @@
 const User = require('../models/user')
 const Job = require('../models/job')
 const logger = require('../logger/logger')
+const JOB_TYPES = require('../constants/jobTypes')
 const validator = require('validator')
-const { isAfter } = require('date-fns') // For date validation
+const { isAfter } = require('date-fns') 
 
 class JobService {
 
@@ -49,26 +50,8 @@ class JobService {
       }
     }
 
-    const validJobTypes = [
-      'Computer Science & IT', 
-      'Web Design & Graphic Design', 
-      'Digital Marketing & Social Media',
-      'Content Creation & Writing',
-      'Photography & Visual Arts',
-      'Virtual Assistant & Administrative Support',
-      'Transcription & Translation',
-      'Consulting & Business Strategy',
-      'Sales & Marketing',
-      'Voiceovers & Audio Production',
-      'Accounting & Financial Services',
-      'Legal & Intellectual Property Services',
-      'Event Planning & Coordination',
-      'Health, Fitness & Wellness',
-      'Education & Tutoring'
-    ];
-
-    if (!validJobTypes.includes(type)) {
-      throw { status: 400, message: `Invalid job type. Available types: ${validJobTypes.join(', ')}` };
+    if (!JOB_TYPES.includes(type)) {
+      throw { status: 400, message: `Invalid job type. Available types: ${JOB_TYPES.join(', ')}` }
     }
 
     // Fetch and check if the user exists in the database
@@ -88,6 +71,10 @@ class JobService {
 
     await job.save()
     logger.info(`User ${userId} successfully posted a job`)
+  }
+
+  async fetchJob(jobCategory) {
+     
   }
 }
 
