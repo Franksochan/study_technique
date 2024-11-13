@@ -1,5 +1,3 @@
-// services/PasswordService.js
-
 const bcrypt = require('bcrypt')
 const logger = require('../logger/logger')
 
