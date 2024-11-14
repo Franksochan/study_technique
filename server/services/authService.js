@@ -4,6 +4,7 @@ const User = require('../models/user')
 const logger = require('../logger/logger')
 const PasswordService = require('./passwordService')
 const EmailService = require('./emailService')
+const { findMissingParams } = require('../utils/paramsValidator')
 
 class AuthService {
   async registerUser (username, email, password, passwordConfirmation) {
@@ -12,7 +13,9 @@ class AuthService {
       logger.info('Registration attempt received')
   
       // Check if all required fields are filled
-      if (!username || !email || !password || !passwordConfirmation) {
+      const requiredParams = { username, email, password, passwordConfirmation }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         logger.warn(`Registration failed: Missing fields: ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please fill in all the required fields' } // Use throw to pass the error
       }
@@ -83,7 +86,9 @@ class AuthService {
       const maskedEmail = EmailService.maskEmail(email)
       logger.info(`Email verification attempt received: ${maskedEmail}`)
   
-      if (!email || !verificationCode) {
+      const requiredParams = { email, verificationCode }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         logger.warn(`Verification failed: Missing required field - ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please fill in all the required fields'}
       }
@@ -118,7 +123,9 @@ class AuthService {
       const maskedEmail = EmailService.maskEmail(email)
       logger.info(`Login attempt received by: ${maskedEmail}`)
   
-      if (!email || !password) {
+      const requiredParams = { email, password }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         logger.warn(`Login attempt failed: Missing fields - ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please fill in all the required fields'}
       }

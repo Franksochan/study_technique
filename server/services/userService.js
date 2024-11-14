@@ -1,12 +1,15 @@
 const User = require('../models/user')
 const logger = require('../logger/logger')
+const { findMissingParams } = require('../utils/paramsValidator')
 
 class UserService {
   async followUser(userId, followId) {
     try {
       logger.info(`Follow request received by ${userId} for ${followId}`)
 
-      if (!followId || !userId) {
+      const requiredParams = { userId, followId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         throw { status: 400, message:'Failed to follow, user id is not found'}
       }
 
@@ -38,7 +41,9 @@ class UserService {
     try {
       logger.info(`Unfollow request received by ${userId} for ${unfollowId}`)
 
-      if (!unfollowId || !userId) {
+      const requiredParams = { unfollowId, userId } 
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         throw { status: 400, message:'Failed to follow, user id is not found'}
       }
   

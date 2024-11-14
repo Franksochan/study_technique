@@ -4,15 +4,17 @@ const logger = require('../logger/logger')
 const JOB_TYPES = require('../constants/jobTypes')
 const validator = require('validator')
 const { isAfter } = require('date-fns') 
+const { findMissingParams } = require('../utils/paramsValidator')
 
 class JobService {
 
   async createJob(title, description, skillsRequired, deadline, maxApplicants, type, userId) {
     try {
       // Ensure required fields are provided and valid
-      const requiredParams = { title, description, skillsRequired, deadline, maxApplicants, userId }
-      if (Object.values(requiredParams).some(param => param === undefined || param === null)) {
-        throw { status: 400, message: "Missing required fields: title, description, skillsRequired, deadline, and userId are required." }
+      const requiredParams = { title, description, skillsRequired, deadline, maxApplicants, type, userId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message: "Missing required fields: title, description, skillsRequired, deadline, type and userId are required." }
       }
 
       // Log sanitized inputs (excluding sensitive data)
@@ -122,7 +124,8 @@ class JobService {
     try {
       // Check if all the required parameters are present
       const requiredParams = { userId, jobId }
-      if (Object.values(requiredParams).some(param => param === undefined || param === null)) {
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
         throw { status: 400, message: "Missing required fields" }
       }
 
