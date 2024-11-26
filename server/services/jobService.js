@@ -164,6 +164,10 @@ class JobService {
       throw new Error(error.message)
     }
   }
+
+  async jobApplication (userId, resume) {
+    
+  }
 }
 
 module.exports = new JobService()
