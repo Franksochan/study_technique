@@ -5,11 +5,11 @@ const Homepage = () => {
 
   const navigate = useNavigate()
 
-  const navigateToAuth = async () => {
-    navigate('/auth')
+  const navigateToAuth = () => {
+    navigate('/login')
   }
 
-  return (
+  return ( 
     <>
     <div className="home-page">
       <div className='home-intro'>

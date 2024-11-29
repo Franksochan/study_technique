@@ -1,0 +1,121 @@
+.registration-page {
+  height: 100vh;
+  min-width: 100%;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.registration-page .lumikha-sign {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  font-size: 2rem;
+  margin: 0;
+  font-weight: bold;
+  color: #333;
+}
+
+.registration-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 680px;
+  min-width: 430px;
+  border: 3px solid #3c3c3c22;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.registration-form h1 {
+  font-size: 2.5rem;
+}
+
+.registration-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 300px;
+}
+
+.registration-form input {
+  margin: 12px;
+  min-width: 90%;
+  font-size: 1.2rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background-color: rgb(156, 153, 153);
+  margin-bottom: 4px;
+}
+
+.registration-form select {
+  margin: 6px;
+  min-width: 90%;
+  font-size: 1rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  background-color: rgb(156, 153, 153);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.registration-form select:focus {
+  outline: none;
+  border-color: #3c3c3c;
+  background-color: #f0f0f0;
+}
+
+.registration-form select option {
+  font-size: 1rem;
+  padding: 10px;
+  background-color: white;
+  color: #333;
+}
+
+.registration-form select option:hover {
+  background-color: #f1f1f1;
+}
+
+.registration-form select:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.registration-form .form-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 100%;
+}
+
+.registration-form p {
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+.registration-form button {
+  background-color: #1E1D1D;
+  border-radius: 10px;
+  border: none;
+  color: #ffff;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+}
+
+.registration-form button:hover {
+  background-color: #393838; 
+  transform: scale(1.05); 
+}
