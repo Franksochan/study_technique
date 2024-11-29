@@ -5,6 +5,7 @@ const logger = require('../logger/logger')
 const PasswordService = require('./passwordService')
 const EmailService = require('./emailService')
 const { findMissingParams } = require('../utils/paramsValidator')
+const { generateTokens } = require('../middleware/jsonWebTokens')
 
 class AuthService {
   async registerUser (firstName, middleName, lastName, email, password, passwordConfirmation, province, municipality) {
@@ -139,7 +140,7 @@ class AuthService {
       }
   
       // Validate email
-      const validatedEmail = await EmailService.validateEmail(email)
+      const validatedEmail = EmailService.validateEmail(email)
       if (!validatedEmail.isValid) {
         logger.warn(`Login attempt failed: Invalid email format: ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please input a valid email' }
@@ -185,6 +186,15 @@ class AuthService {
         logger.warn(`Login attempt failed: User email is not verified - ${maskedEmail}`)
         return res.status(400).json({ error: 'Please verify your email first' })
       }
+
+      // Generate tokens
+      const tokens = generateTokens(user)
+
+      // Set cookies with access and refresh tokens
+      const accessToken = tokens.accessToken
+      const refreshToken = tokens.refreshToken
+
+      return { accessToken, refreshToken, userID: user._id }
   
       logger.info(`Login attempt succesful - ${maskedEmail}`)
     } catch (error) {

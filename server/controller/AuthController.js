@@ -31,8 +31,27 @@ class AuthController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body
-      await AuthService.logIn(email, password)
-      res.status(200).json({ message: 'Login successful!' })
+      const { accessToken, refreshToken, userID } = await AuthService.logIn(email, password)
+
+      // Set cookies
+      res.cookie('refreshToken', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+      })
+      
+      res.cookie('accessToken', accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'none',
+      })
+
+      res.status(200).json({
+          message: 'Login successful!',
+          accessToken,
+          refreshToken,
+          userID,
+      })
     } catch (error) {
       logger.error(`Login error - ${error.message}`)
       next(error)
