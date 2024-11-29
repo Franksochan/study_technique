@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../../../utils/api'
 import './Register.css'
 
 const Registration = () => {
+
   const [provinces, setProvinces] = useState([])
   const [municipalities, setMunicipalities] = useState([])
-  const [selectedProvince, setSelectedProvince] = useState('')
-  const [selectedMunicipality, setSelectedMunicipalities] = useState('')
+  const [registrationData, setRegistrationData] = useState({
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    passwordConfirmation: '',
+    selectedProvince: '',
+    selectedProvinceName: '',
+    selectedMunicipality: '',
+    selectedMunicipalityName: '',
+  })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios
+    api
       .get('https://psgc.gitlab.io/api/provinces/')
       .then(response => {
         setProvinces(response.data)
@@ -26,11 +37,11 @@ const Registration = () => {
   }, [])
 
   useEffect(() => {
-    if (selectedProvince) {
-      console.log(selectedProvince)
+    if (registrationData.selectedProvince) {
+      console.log(registrationData.selectedProvince)
       setMunicipalities([])
-      axios
-        .get(`https://psgc.gitlab.io/api/provinces/${selectedProvince}/municipalities/`)
+      api
+        .get(`https://psgc.gitlab.io/api/provinces/${registrationData.selectedProvince}/municipalities/`)
         .then(response => {
           setMunicipalities(response.data)
         })
@@ -38,18 +49,71 @@ const Registration = () => {
           setError('Failed to load cities.')
         })
     }
-  }, [selectedProvince])
+  }, [registrationData.selectedProvince])
 
-  const handleProvinceChange = (event) => {
-    setSelectedProvince(event.target.value)
-  }
+  const handleFieldChange = (e) => {
+    const { name, value } = e.target
+    let formattedValue = value
 
-  const handleMunicipalityChange = (event) => { 
-    setSelectedMunicipalities(event.target.value)
+    // If the name is for a select (province or municipality), update the selected name as well
+    if (name === 'selectedProvince') {
+      const selectedProvince = provinces.find(province => province.code === value)
+      setRegistrationData((prevData) => ({
+        ...prevData,
+        selectedProvince: value,
+        selectedProvinceName: selectedProvince ? selectedProvince.name : '', 
+      }))
+    } else if (name === 'selectedMunicipality') {
+      const selectedMunicipality = municipalities.find(municipality => municipality.code === value)
+      setRegistrationData((prevData) => ({
+        ...prevData,
+        selectedMunicipality: value,
+        selectedMunicipalityName: selectedMunicipality ? selectedMunicipality.name : '',
+      }))
+    } else {
+      try {
+        formattedValue = JSON.parse(value)
+      } catch (error) {
+        // Ignore parsing errors and keep the value as a string
+      }
+
+      setRegistrationData((prevData) => ({
+        ...prevData,
+        [name]: formattedValue,
+      }))
+    }
   }
 
   const navigateToLogin = () => {
     navigate('/login')
+  }
+
+  const handleSubmit = async () => {
+    try {
+      const response = await api.post('auth/registration', {
+        firstName: registrationData.firstName,
+        middleName: registrationData.middleName,
+        lastName: registrationData.lastName,
+        email: registrationData.email,
+        password: registrationData.password,
+        passwordConfirmation: registrationData.passwordConfirmation,
+        province: registrationData.selectedProvinceName,
+        municipality: registrationData.selectedMunicipalityName
+      })
+
+      if (response.status === 201) {
+        console.log(response)
+        alert(response.data.message)
+        console.log(response.data.message)
+        navigate(`/verify-email/${registrationData.email}`)
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        alert(error.response.data.error.message)
+      } else {
+        alert('An error occurred. Please try again.')
+      }
+    }
   }
 
   return (
@@ -61,38 +125,44 @@ const Registration = () => {
         <form>
             <input
               type='text'
-              name='first-name'
+              name='firstName'
               placeholder='First Name'
+              onChange={handleFieldChange}
             />
             <input
               type='text'
-              name='middle-name'
+              name='middleName'
               placeholder='Middle Name'
+              onChange={handleFieldChange}
             />
             <input
               type='text'
-              name='last-name'
+              name='lastName'
               placeholder='Last Name'
+              onChange={handleFieldChange}
             />
             <input
               type='text'
               name='email'
               placeholder='yourname@gmail.com'
+              onChange={handleFieldChange}
             />
             <input
               type='password'
               name='password'
               placeholder='Password'
+              onChange={handleFieldChange}
             />
              <input
               type='password'
-              name='password-confirmation'
+              name='passwordConfirmation'
               placeholder='Confirm Password'
+              onChange={handleFieldChange}
             />
             <select
-              name="province"
-              value={selectedProvince}
-              onChange={handleProvinceChange}
+              name="selectedProvince"
+              value={registrationData.selectedProvince}
+              onChange={handleFieldChange}
               required
             >
               <option value="">Select Province</option>
@@ -102,14 +172,14 @@ const Registration = () => {
                 </option>
               ))}
             </select>
-            { selectedProvince && 
+            { registrationData.selectedProvince && 
                 <select
-                  name='city'
-                  value={selectedMunicipality}
-                  onChange={handleMunicipalityChange}
+                  name='selectedMunicipality'
+                  value={registrationData.selectedMunicipality}
+                  onChange={handleFieldChange}
                   required
                 >
-                <option>Select City</option>
+                <option>Select Municipality</option>
                 {municipalities.map((municipality) => (
                   <option key={municipality.code} value={municipality.code}>
                     {municipality.name}
@@ -119,7 +189,7 @@ const Registration = () => {
             }            
           </form>
           <div className="form-footer">
-            <button>Register</button>
+            <button onClick={handleSubmit}>Register</button>
             <button onClick={() => navigateToLogin()}>Back to Login</button>
         </div>
       </div>
