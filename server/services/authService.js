@@ -7,23 +7,27 @@ const EmailService = require('./emailService')
 const { findMissingParams } = require('../utils/paramsValidator')
 
 class AuthService {
-  async registerUser (username, email, password, passwordConfirmation) {
+  async registerUser (firstName, middleName, lastName, email, password, passwordConfirmation, province, municipality) {
     try {
+      console.log(passwordConfirmation)
       const maskedEmail = EmailService.maskEmail(email)
       logger.info('Registration attempt received')
   
       // Check if all required fields are filled
-      const requiredParams = { username, email, password, passwordConfirmation }
+      const requiredParams = { firstName, middleName, lastName, email, password, passwordConfirmation, province, municipality }
       const missingParams = findMissingParams(requiredParams)
       if (missingParams) {
         logger.warn(`Registration failed: Missing fields: ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please fill in all the required fields' } // Use throw to pass the error
       }
-  
-      // Check if username length is valid
-      if (username.length < 6 || username.length > 12) {
-        logger.warn(`Registration failed: Invalid username length: ${maskedEmail}`)
-        throw { statusCode: 400, message: 'Username should be longer than 5 characters and a maximum of 12 characters' }
+
+      // Check if each parameter is a string
+      const stringFields = ['firstName', 'middleName', 'lastName', 'email', 'password', 'passwordConfirmation', 'province', 'municipality'];
+      for (let field of stringFields) {
+        if (typeof requiredParams[field] !== 'string') {
+          logger.warn(`Registration failed: Invalid type for field ${field}: ${maskedEmail}`);
+          throw { statusCode: 400, message: `${field} should be a string` };
+        }
       }
   
       // Check for validating email
@@ -33,9 +37,9 @@ class AuthService {
         throw { statusCode: 400, message: 'Please input a valid email' }
       }
   
-      const existingUser = await User.findOne({ $or: [{ username }, { email }] })
+      const existingUser = await User.findOne({ email })
       if (existingUser) {
-        const errorMsg = existingUser.username === username ? 'Username already taken' : 'Email already exists'
+        const errorMsg = existingUser.email === email && 'Email already exists'
         logger.warn(`Registration failed: ${errorMsg} - ${maskedEmail}`)
         throw { statusCode: 400, message: errorMsg }
       }
@@ -57,7 +61,7 @@ class AuthService {
       logger.info('Password hashed successfully')
   
       // Generate verification code
-      const verificationCode = await EmailService.generateVerificationCode()
+      const verificationCode = EmailService.generateVerificationCode()
       logger.info('Verification code generated')
   
       // Send verification email
@@ -66,9 +70,13 @@ class AuthService {
   
       // Create a new user
       const newUser = new User({
-        username,
+        firstName,
+        middleName,
+        lastName,
         email,
         password: hashedPassword,
+        province,
+        municipality,
         verificationCode,
         joinedDate: new Date(),
       })

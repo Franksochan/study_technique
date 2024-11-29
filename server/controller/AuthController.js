@@ -5,9 +5,9 @@ class AuthController {
   // Register a new user
   async register(req, res, next) {
     try {
-      const { username, email, password, passwordConfirmation } = req.body
-      await AuthService.registerUser(username, email, password, passwordConfirmation)
-      res.status(201).json({ message: 'Registration successful! Please check your email for verification.' });
+      const { firstName, middleName, lastName, email, password, passwordConfirmation, province, municipality } = req.body
+      await AuthService.registerUser(firstName, middleName, lastName, email, password, passwordConfirmation, province, municipality)
+      res.status(201).json({ message: 'Registration successful! Please check your email for verification.' })
     } catch (error) {
       logger.error(`Registration error - ${error.message}`)
       next(error)
@@ -17,7 +17,8 @@ class AuthController {
   // Verify user email
   async verify(req, res, next) {
     try {
-      const { email, verificationCode } = req.body
+      const { email } = req.params
+      const { verificationCode } = req.body
       await AuthService.verifyEmail(email, verificationCode)
       res.status(200).json({ message: 'Email verified successfully!' })
     } catch (error) {
