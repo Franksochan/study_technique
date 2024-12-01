@@ -32,7 +32,7 @@ class AuthService {
       }
   
       // Check for validating email
-      const validatedEmail = EmailService.validateEmail(email)
+      const validatedEmail = await EmailService.validateEmail(email)
       if (!validatedEmail.isValid) {
         logger.warn(`Registration failed: Invalid email format: ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please input a valid email' }
@@ -62,7 +62,7 @@ class AuthService {
       logger.info('Password hashed successfully')
   
       // Generate verification code
-      const verificationCode = EmailService.generateVerificationCode()
+      const verificationCode = await EmailService.generateVerificationCode()
       logger.info('Verification code generated')
   
       // Send verification email
@@ -129,7 +129,7 @@ class AuthService {
 
   async logIn (email, password) {
     try {
-      const maskedEmail = EmailService.maskEmail(email)
+      const maskedEmail = await EmailService.maskEmail(email)
       logger.info(`Login attempt received by: ${maskedEmail}`)
   
       const requiredParams = { email, password }
@@ -140,7 +140,7 @@ class AuthService {
       }
   
       // Validate email
-      const validatedEmail = EmailService.validateEmail(email)
+      const validatedEmail = await EmailService.validateEmail(email)
       if (!validatedEmail.isValid) {
         logger.warn(`Login attempt failed: Invalid email format: ${maskedEmail}`)
         throw { statusCode: 400, message: 'Please input a valid email' }
