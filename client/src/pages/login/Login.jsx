@@ -33,7 +33,8 @@ const Login = () => {
         console.log(response)
         const { userID,  accessToken } = response.data
         setAuth({ accessToken })
-        alert(response.data.message)
+        localStorage.setItem('userID', userID)
+        navigate('/job-listings')
       }
     } catch (error) {
       if (error.response && error.response.data) {
