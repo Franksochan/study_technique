@@ -26,7 +26,15 @@ const JobListing = () => {
   const [showInfoPopup, setShowInfoPopup] = useState(false)
   const [jobs, setJobs] = useState([])
   const [showJobForm, setShowJobForm] = useState(false)
-  const [newJob, setNewJob] = useState({})
+  const [newJob, setNewJob] = useState({
+    title: '',
+    description: '',
+    skillsRequired: [],
+    deadline: '',
+    maxApplicants: '',
+    type: '',
+  })
+  const userID = localStorage.getItem('userID')
 
   useEffect(() => {
     if (selectedJobType) {
@@ -53,26 +61,25 @@ const JobListing = () => {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target
+  
+    // Handle comma-separated skills input
     let formattedValue = value
-
-      try {
-        formattedValue = JSON.parse(value)
-      } catch (error) {
-        // Ignore parsing errors and keep the value as a string
-      }
-
-      setNewJob((prevData) => ({
-        ...prevData,
-        [name]: formattedValue,
-      }))
+    if (name === "skillsRequired") {
+      formattedValue = value.split(',').map(skill => skill.trim()) // Convert to array and trim spaces
+    }
+  
+    setNewJob((prevData) => ({
+      ...prevData,
+      [name]: name === "maxApplicants" ? parseInt(value, 10) : formattedValue,
+    }))
   }
+  
 
   const handleJobSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await api.post('job/create-job', newJob)
+      const response = await api.post(`job/create-job/${userID}`, newJob)
       if (response.status === 201) {
-        alert('Job created successfully!')
         setShowJobForm(false) 
         setNewJob({
           title: '',
@@ -81,6 +88,7 @@ const JobListing = () => {
           deadline: '',
           maxApplicants: '',
         }) 
+        alert(response.data.message)
         fetchJobs() 
       }
     } catch (error) {
@@ -135,7 +143,7 @@ const JobListing = () => {
               <p><strong>Deadline:</strong> {new Date(job.deadline).toLocaleDateString()}</p>
               <p><strong>Status:</strong> {job.status}</p>
               <p><strong>Max Applicants:</strong> {job.maxApplicants}</p>
-              <button className="apply-btn">Apply</button>
+              <button className="apply-btn">{ job.postedBy === userID ? 'View Your Applicants': 'Apply' }</button>
             </div>
           ))
         ) : (
