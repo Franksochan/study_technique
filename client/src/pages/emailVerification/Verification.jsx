@@ -34,7 +34,7 @@ const Verification = () => {
     <div className="verification-page">
       <h1 className="lumikha-sign">LUMIKHA</h1>
       <div className="verification-form">
-        <h1>Account Verification</h1>
+        <h1>Email Verification</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
