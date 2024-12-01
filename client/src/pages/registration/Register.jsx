@@ -88,6 +88,10 @@ const Registration = () => {
     navigate('/login')
   }
 
+  const navigateToLandingPage = () => {
+    navigate('/')
+  }
+
   const handleSubmit = async () => {
     try {
       const response = await api.post('auth/registration', {
@@ -119,7 +123,7 @@ const Registration = () => {
   return (
     <>
       <div className="registration-page">
-      <h1 className='lumikha-sign'>LUMIKHA</h1>
+      <h1 className='lumikha-sign' onClick={() => navigateToLandingPage()}>LUMIKHA</h1>
       <div className="registration-form">
         <h1>Register</h1>
         <form>
