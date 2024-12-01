@@ -9,7 +9,7 @@ class JobController {
       const { userId } = req.params
 
       await JobService.createJob(title, description, skillsRequired, deadline, maxApplicants, type, userId)
-      res.status(200).json({ message: 'Job has been posted succesfully'})
+      res.status(201).json({ message: 'Job has been posted succesfully'})
     } catch (error) {
       logger.error(`Error posting the job - ${error.message}`)
       next(error)
