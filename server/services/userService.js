@@ -3,6 +3,54 @@ const logger = require('../logger/logger')
 const { findMissingParams } = require('../utils/paramsValidator')
 
 class UserService {
+  async fetchUser(userId) {
+    try {
+      logger.info(`Fetching user: ${userId}`)
+  
+      // Validate required parameter
+      const requiredParams = { userId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message: 'Failed to fetch user: User ID is not provided' }
+      }
+  
+      // Find user by ID
+      const user = await User.findById(userId)
+        .select('firstName middleName lastName email province municipality profilePic bio socialLinks followers following joinedDate')
+        .populate('followers', 'firstName lastName profilePic') 
+        .populate('following', 'firstName lastName profilePic') 
+  
+      if (!user) {
+        throw { status: 404, message: 'Failed to fetch user: User not found' }
+      }
+  
+      // Return the user's attributes
+      return {
+        id: user._id,
+        name: `${user.firstName} ${user.middleName} ${user.lastName}`,
+        email: user.email,
+        location: `${user.municipality}, ${user.province}`,
+        profilePic: user.profilePic || null,
+        bio: user.bio || "This user hasn't set up their bio yet.",
+        socialLinks: user.socialLinks || { facebook: '', twitter: '', instagram: '' },
+        followers: user.followers.map(follower => ({
+          id: follower._id,
+          name: `${follower.firstName} ${follower.lastName}`,
+          profilePic: follower.profilePic || null,
+        })),
+        following: user.following.map(following => ({
+          id: following._id,
+          name: `${following.firstName} ${following.lastName}`,
+          profilePic: following.profilePic || null,
+        })),
+        joinedDate: user.joinedDate,
+      }
+    } catch (error) {
+      logger.error(`Error fetching user: ${error.message}`)
+      throw new Error(error.message)
+    }
+  }
+  
   async followUser(userId, followId) {
     try {
       logger.info(`Follow request received by ${userId} for ${followId}`)
@@ -71,6 +119,58 @@ class UserService {
       throw new Error(error.message)
     }
   }
+
+  async addBio(userId, newBio) {
+    try {
+      const requiredParams = { userId, newBio } 
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message:'Failed to add a bio: Please fill in all the required fields'}
+      }
+
+      const user = await User.findById(userId)
+
+      if (!user) {
+        throw { status: 404, message: 'Failed to add a bio: User is not found'}
+      }
+
+      user.bio = newBio
+      await user.save()
+
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async addLink(userId, platform, link) {
+    try {
+      const requiredParams = { userId, platform, link } 
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message:'Failed to add a bio: Please fill in all the required fields'}
+      }
+
+      const user = await User.findById(userId)
+
+      if (!user) {
+        throw { status: 404, message: 'Failed to add a bio: User is not found'}
+      }
+
+      const validPlatforms = ["facebook", "twitter", "instagram", "github"];
+      if (!validPlatforms.includes(platform)) {
+        throw { status: 400, message: 'Failed to add a link: Invalid platform' };
+      }
+
+      user.socialLinks[platform] = link
+
+      await user.save()
+      
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async changeName = (userId, )
 }
 
 module.exports = new UserService()
