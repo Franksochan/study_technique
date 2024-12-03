@@ -63,6 +63,16 @@ const UserSchema = mongoose.Schema({
   portfolio: [{
     type: String
   }], 
+  bio: {
+    type: String,
+    default: "This is my bio",
+  },
+  socialLinks: {
+    facebook: { type: String, default: "" },
+    twitter: { type: String, default: "" },
+    instagram: { type: String, default: "" },
+    github: { type: String, default: ""}
+  },  
   failedLoginAttempts: { type: Number, default: 0 }, 
   lockUntil: { type: Date },
   resetPasswordToken: { type: String, default: undefined},
