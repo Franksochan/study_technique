@@ -13,10 +13,9 @@ const Sidebar = () => {
       </div>
       <nav className="sidebar-menu">
         <ul>
-          <li><a href="/dashboard">Dashboard</a></li>
-          <li><a href="/saved-jobs">Saved Jobs</a></li>
-          <li><a href="/applied-jobs">Applied Jobs</a></li>
-          <li><a href="/settings">Account Settings</a></li>
+          <li><a href='/profile'>Profile</a></li>
+          <li><a href='/dashboard'>Dashboard</a></li>
+          <li><a href='/settings'>Account Settings</a></li>
         </ul>
       </nav>
     </aside>
