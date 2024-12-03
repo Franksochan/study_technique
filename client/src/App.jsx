@@ -1,12 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
-
+import './App.css'
 
 const Login = lazy(() => import('./pages/login/Login'))
 const LandingPage = lazy(() => import('./pages/landing/LandingPage'))
 const Registration = lazy(() => import('../src/pages/registration/Register'))
 const Verification = lazy(() => import('../src/pages/emailVerification/Verification'))
 const JobListingPage = lazy(() => import('./pages/jobListing/JobListingPage'))
+const ProfilePage = lazy(() => import('./pages/profilePage/ProfilePage'))
+const AccountSettings = lazy(() => import('./pages/accountSetting/AccountSettings'))
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
           <Route path='/register' element={ <Registration/> } />
           <Route path='/verify-email/:email' element={ <Verification/> } />
           <Route path='/job-listings' element={ <JobListingPage/> } />
+          <Route path='/profile' element={ <ProfilePage/> } />
+          <Route path='/settings' element={ <AccountSettings /> } />
         </Routes>
       </Suspense>
     </Router>
