@@ -1,6 +1,9 @@
 const User = require('../models/user')
 const logger = require('../logger/logger')
+const bcrypt = require('bcrypt')
 const { findMissingParams } = require('../utils/paramsValidator')
+const PasswordService = require('./passwordService')
+const EmailService = require('./emailService')
 
 class UserService {
   async fetchUser(userId) {
@@ -170,7 +173,38 @@ class UserService {
     }
   }
 
-  async changeName = (userId, )
+  async changePassword(userId, currentPassword, newPassword, newPasswordConfirmation) {
+    try {
+      const requiredParams = { userId, currentPassword, newPassword, newPasswordConfirmation } 
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message:'Failed to change password: Please fill in all the required fields'}
+      }
+
+      const user = await User.findById(userId) 
+      if (!user) {
+        throw { status: 404, message: 'Failed to change password: User is not found' }
+      }
+
+      const isPasswordValid = await PasswordService.comparePassword(currentPassword, user.password)
+      if (!isPasswordValid) {
+        throw { status: 400, message: 'Failed to change password: Current password is incorrect' }
+      }
+
+      if (newPassword !== newPasswordConfirmation) {
+        throw { status: 400, message: 'Failed to change password: Passwords dont match' }
+      }
+
+      const hashedPassword = await PasswordService.hashPassword(newPassword, 10)
+
+      user.password = hashedPassword
+
+      await user.save()
+
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
 }
 
 module.exports = new UserService()
