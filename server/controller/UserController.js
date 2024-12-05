@@ -60,6 +60,18 @@ class UserController {
       next(error)
     }
   }
+
+  async changePassword(req, res, next) {
+    try {
+      const { userId } = req.params
+      const { currentPassword, newPassword, newPasswordConfirmation } = req.body
+      await UserService.changePassword(userId, currentPassword, newPassword, newPasswordConfirmation)
+      res.status(200).json({ message: 'Password changed succesfully' })
+    } catch (error) {
+      logger.error(`Error changing password - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 
