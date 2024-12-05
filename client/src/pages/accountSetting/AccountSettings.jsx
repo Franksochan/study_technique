@@ -4,31 +4,26 @@ import api from "../../../utils/api"
 import "./AccountSettings.css"
 
 const AccountSettings = () => {
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [currentPassword, setCurrentPassword] = useState("")
-  const [newPassword, setNewPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-
-  const handleChangeEmail = async () => {
-    try {
-      await api.post("/user/change-email", { email })
-      alert("Email updated successfully!")
-    } catch (error) {
-      alert("Failed to update email.")
-    }
-  }
+  const [passwordForEmail, setPasswordForEmail] = useState('')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('')
+  const [errorMsg, setErrorMsg] = useState(null)
+  const userId = localStorage.getItem('userID')
 
   const handleChangePassword = async () => {
-    if (newPassword !== confirmPassword) {
-      alert("Passwords do not match.")
-      return
-    }
     try {
-      await api.post("/user/change-password", { currentPassword, newPassword })
-      alert("Password updated successfully!")
+      const response = await api.put(`/user/change-password/${userId}`, { currentPassword, newPassword, newPasswordConfirmation })
+      
+      if (response.status === 200) {
+        alert(response.data.message)
+      }
     } catch (error) {
-      alert("Failed to update password.")
+      if (error.response && error.response.data) {
+        setErrorMsg(error.response.data.error.message)
+      } else {
+        alert('An error occurred. Please try again.')
+      }
     }
   }
 
@@ -52,19 +47,6 @@ const AccountSettings = () => {
       </Link>
 
       <h1>Account Settings</h1>
-
-      {/* Change Email Section */}
-      <div className="settings-section">
-        <h2>Change Email</h2>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your new email"
-        />
-        <button onClick={handleChangeEmail}>Save Email</button>
-      </div>
-
       {/* Change Password Section */}
       <div className="settings-section">
         <h2>Change Password</h2>
@@ -82,10 +64,11 @@ const AccountSettings = () => {
         />
         <input
           type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={newPasswordConfirmation}
+          onChange={(e) => setNewPasswordConfirmation(e.target.value)}
           placeholder="Confirm new password"
         />
+        {errorMsg && <p className="error-message">{errorMsg}</p>}
         <button onClick={handleChangePassword}>Save Password</button>
       </div>
 
