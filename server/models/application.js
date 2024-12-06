@@ -1,3 +1,5 @@
+const mongoose = require('mongoose')
+
 const ApplicationSchema = mongoose.Schema({
   job: {
     type: mongoose.Schema.Types.ObjectId,
@@ -7,6 +9,10 @@ const ApplicationSchema = mongoose.Schema({
   applicant: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+  },
+  resumeLink: {
+    type: String,
     required: true,
   },
   coverLetter: {
@@ -22,6 +28,6 @@ const ApplicationSchema = mongoose.Schema({
     enum: ['pending', 'accepted', 'rejected'],
     default: 'pending',
   },
-});
+})
 
 module.exports = mongoose.model('Application', ApplicationSchema);
