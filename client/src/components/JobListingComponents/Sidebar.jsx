@@ -1,6 +1,7 @@
 import './Sidebar.css'
 
 const Sidebar = () => {
+  const userId = localStorage.getItem('userID')
   return (
     <aside className="sidebar">
       <div className="profile-section">
@@ -17,7 +18,7 @@ const Sidebar = () => {
           <li><a href='/dashboard'>Dashboard</a></li>
           <li><a href='/settings'>Account Settings</a></li>
           <li><a href='/messages'>Messages</a></li>
-          <li><a href='/notifications'>Notifications</a></li>
+          <li><a href={`/notifications/${userId}`}>Notifications</a></li>
         </ul>
       </nav>
     </aside>
