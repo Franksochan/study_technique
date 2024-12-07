@@ -39,6 +39,27 @@ class JobController {
     }
   }
 
+  async getJobDetails(req, res, next) {
+    try {
+      const { jobId } = req.params
+      const job = await JobService.getJobDetails(jobId)
+      res.status(200).json({ job, message: 'Job details fetched succesfully'})
+    } catch (error) {
+      logger.error(`Error fetching the job details - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async getJobApplicants(req, res, next) {
+    try {
+      const { jobId } = req.params
+      const applicants = await JobService.getJobApplicants(jobId)
+      res.status(200).json({ applicants, message: 'Job applicants fetched succesfully'})
+    } catch (error) {
+      logger.error(`Error fetching the job applicants - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 module.exports = new JobController()

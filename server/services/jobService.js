@@ -1,5 +1,6 @@
 const User = require('../models/user')
 const Job = require('../models/job')
+const Application = require('../models/application')
 const logger = require('../logger/logger')
 const JOB_TYPES = require('../constants/jobTypes')
 const validator = require('validator')
@@ -165,9 +166,67 @@ class JobService {
     }
   }
 
-  async jobApplication (userId, resume) {
+  async getJobDetails(jobId) {
+    try {
+      const requiredParams = { jobId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message: 'Missing required fields' }
+      }
+
+      const job = await Job.findById(jobId)
+
+      if (!job) {
+        throw { status: 400, message: 'Error fetching job details: Job is not found'}
+      }
+
+      return job
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
     
+  // New method to get job applicants
+  async getJobApplicants(jobId) {
+    try {
+      const requiredParams = { jobId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message: 'Missing jobId' }
+      }
+
+      // Fetch the job to ensure it exists
+      const job = await Job.findById(jobId)
+      if (!job) {
+        throw { status: 404, message: 'Job not found' }
+      }
+
+      // Fetch the applications associated with the job and populate applicant data
+      const applications = await Application.find({ job: jobId })
+        .populate('applicant', 'firstName middleName lastName email') // Populate user details (first name, middle name, last name, email)
+        .exec()
+
+      // If no applications are found
+      if (!applications || applications.length === 0) {
+        return { message: 'No applications found for this job' }
+      }
+
+      // Map the applications to include relevant information
+      const applicants = applications.map(application => ({
+        applicantName: `${application.applicant.firstName} ${application.applicant.middleName} ${application.applicant.lastName}`,
+        applicantEmail: application.applicant.email, // Include applicant email
+        resumeLink: application.resumeLink,
+        coverLetter: application.coverLetter,
+        dateApplied: application.dateApplied,
+        status: application.status
+      }))
+
+      return applicants
+    } catch (error) {
+      throw new Error(error.message)
+    }
   }
 }
+
 
 module.exports = new JobService()
