@@ -2,6 +2,7 @@ const User = require('../models/user')
 const Job = require('../models/job')
 const Application = require('../models/application')
 const Notification = require('../models/notification')
+const EmailService = require('./emailService')
 const logger = require('../logger/logger')
 const { findMissingParams } = require('../utils/paramsValidator')
 const admin = require('../config/firebase.config')
@@ -113,6 +114,11 @@ class ApplicationService {
           jobPoster.notifications = jobPoster.notifications || []
           jobPoster.notifications.push(savedNotification._id)
           await jobPoster.save()
+
+          const applicantName = (`${user.firstName} ${user.middleName} ${user.lastName}`)
+          const applicantEmail = user.email
+          
+          await EmailService.sendApplicationEmail(jobPoster.email, applicantName, applicantEmail )
         }
       } catch (error) {
         console.error('Upload failed after multiple attempts:', error.message)
