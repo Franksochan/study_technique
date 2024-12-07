@@ -1,0 +1,104 @@
+.job-application-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  color: #1E1D1D;  /* Color from your palette */
+}
+
+.job-application-section {
+  flex: 4;
+  padding: 20px;
+  background-color: #f7f7f7;
+  overflow-y: auto;
+}
+
+.job-application-section header {
+  display: flex;
+  flex-direction: column;
+}
+
+.job-application-section header h1 {
+  font-size: 2rem;
+  color: #1E1D1D; 
+}
+
+.job-application-section .back-button {
+  background-color: #1E1D1D;  /* Dark color from your palette */
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  width: 30%;
+}
+
+.job-application-section .back-button:hover {
+  background-color: #393838;  /* Lighter shade on hover */
+  transform: scale(1.05);  /* Smooth hover effect */
+}
+
+.job-application-section .job-details h3 {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.job-application-section .job-details p {
+  font-size: 1rem;
+  color: #555;
+}
+
+.application-form {
+  margin-top: 30px;
+  background-color: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  max-width: 800px;
+}
+
+.application-form input, .application-form textarea {
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+}
+
+.application-form input:focus, .application-form textarea:focus {
+  border-color: #1E1D1D;  /* Focus color matching palette */
+  outline: none;
+}
+
+.application-form button {
+  width: 100%;
+  padding: 12px;
+  background-color: #1E1D1D;  /* Dark button color */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.application-form button[type="button"] {
+  background-color: #ccc;
+}
+
+.application-form button:hover {
+  background-color: #393838;  /* Lighter shade on hover */
+}
+
+.error {
+  color: red;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
