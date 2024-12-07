@@ -51,7 +51,7 @@ const UserSchema = mongoose.Schema({
   followers: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  }], 
+  }],
   following: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
@@ -60,6 +60,10 @@ const UserSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Job'
   }],
+  appliedJobs: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Job'
+  }],  
   portfolio: [{
     type: String
   }], 

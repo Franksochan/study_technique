@@ -19,13 +19,15 @@ class UserService {
   
       // Find user by ID
       const user = await User.findById(userId)
-        .select('firstName middleName lastName email province municipality profilePic bio socialLinks followers following joinedDate')
+        .select('firstName middleName lastName email province municipality profilePic bio socialLinks followers following joinedDate appliedJobs')
         .populate('followers', 'firstName lastName profilePic') 
         .populate('following', 'firstName lastName profilePic') 
   
       if (!user) {
         throw { status: 404, message: 'Failed to fetch user: User not found' }
       }
+
+      console.log(user.appliedJobs)
   
       // Return the user's attributes
       return {
@@ -36,6 +38,7 @@ class UserService {
         profilePic: user.profilePic || null,
         bio: user.bio || "This user hasn't set up their bio yet.",
         socialLinks: user.socialLinks || { facebook: '', twitter: '', instagram: '' },
+        appliedJobs: user.appliedJobs,
         followers: user.followers.map(follower => ({
           id: follower._id,
           name: `${follower.firstName} ${follower.lastName}`,

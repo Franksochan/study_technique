@@ -39,9 +39,9 @@ const JobSchema = mongoose.Schema({
     default: 10,  
     min: 1,  
   },
-  applicants: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+  applications: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: 'Application'
   },
   type: {
     type: String,
