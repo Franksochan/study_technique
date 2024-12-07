@@ -9,6 +9,8 @@ const Verification = lazy(() => import('../src/pages/emailVerification/Verificat
 const JobListingPage = lazy(() => import('./pages/jobListing/JobListingPage'))
 const ProfilePage = lazy(() => import('./pages/profilePage/ProfilePage'))
 const AccountSettings = lazy(() => import('./pages/accountSetting/AccountSettings'))
+const JobApplicationPage = lazy(() => import('./pages/jobApplication/JobApplicationPage'))
+const JobApplicants = lazy(() => import('./pages/jobApplicants/JobApplicants'))
 
 const App = () => {
   return (
@@ -22,6 +24,8 @@ const App = () => {
           <Route path='/job-listings' element={ <JobListingPage/> } />
           <Route path='/profile' element={ <ProfilePage/> } />
           <Route path='/settings' element={ <AccountSettings /> } />
+          <Route path='/apply/:jobId' element={ <JobApplicationPage />} />
+          <Route path='/applicants/:jobId' element={ <JobApplicants />} />
         </Routes>
       </Suspense>
     </Router>
