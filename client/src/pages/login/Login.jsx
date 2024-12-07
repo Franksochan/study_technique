@@ -26,6 +26,10 @@ const Login = () => {
     }
 
   const handleSubmit = async () => {
+    if (!loginData.email || !loginData.password) {
+      alert('Please fill in all the required fields')
+      return
+    }
     try {
       const response = await api.post('auth/login', { email: loginData.email, password: loginData.password })
 
@@ -65,12 +69,15 @@ const Login = () => {
               name='email'
               placeholder='yourname@gmail.com'
               onChange={handleFieldChange}
+              required
+
             />
             <input
               type='password'
               name='password'
               placeholder='Password'
               onChange={handleFieldChange}
+              required
             />
           </form>
           <div className="form-footer">
