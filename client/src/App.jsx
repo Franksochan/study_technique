@@ -11,6 +11,7 @@ const ProfilePage = lazy(() => import('./pages/profilePage/ProfilePage'))
 const AccountSettings = lazy(() => import('./pages/accountSetting/AccountSettings'))
 const JobApplicationPage = lazy(() => import('./pages/jobApplication/JobApplicationPage'))
 const JobApplicants = lazy(() => import('./pages/jobApplicants/JobApplicants'))
+const NotificationsPage = lazy(() => import('./pages/notifications/Notifications'))
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path='/settings' element={ <AccountSettings /> } />
           <Route path='/apply/:jobId' element={ <JobApplicationPage />} />
           <Route path='/applicants/:jobId' element={ <JobApplicants />} />
+          <Route path='/notifications/:userId' element={ <NotificationsPage />} />
         </Routes>
       </Suspense>
     </Router>
