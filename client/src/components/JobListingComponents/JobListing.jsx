@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { Navigate, useNavigate } from 'react-router-dom'
+import useUserData from '../../../hooks/useUserData'
 import './JobListing.css'
 import api from '../../../utils/api'
 
@@ -26,6 +28,7 @@ const JobListing = () => {
   const [showInfoPopup, setShowInfoPopup] = useState(false)
   const [jobs, setJobs] = useState([])
   const [showJobForm, setShowJobForm] = useState(false)
+  const navigate = useNavigate()
   const [newJob, setNewJob] = useState({
     title: '',
     description: '',
@@ -36,10 +39,12 @@ const JobListing = () => {
   })
   const userID = localStorage.getItem('userID')
 
+  const { user } = useUserData()
+
   useEffect(() => {
     if (selectedJobType) {
       fetchJobs()
-    }
+    } 
   }, [selectedJobType])
 
   const fetchJobs = async () => {
@@ -143,7 +148,23 @@ const JobListing = () => {
               <p><strong>Deadline:</strong> {new Date(job.deadline).toLocaleDateString()}</p>
               <p><strong>Status:</strong> {job.status}</p>
               <p><strong>Max Applicants:</strong> {job.maxApplicants}</p>
-              <button className="apply-btn">{ job.postedBy === userID ? 'View Your Applicants': 'Apply' }</button>
+              <button 
+                className="apply-btn" 
+                onClick={() => {
+                  if (job.postedBy === userID) {
+                    navigate(`/applicants/${job._id}`);
+                  } else {
+                    navigate(`/apply/${job._id}`);
+                  }
+                }}
+                disabled={user.appliedJobs && user.appliedJobs.some(appliedJob => appliedJob.toString() === job._id.toString())}
+              >
+                {job.postedBy === userID 
+                  ? 'View Your Applicants' 
+                  : (user.appliedJobs && user.appliedJobs.some(appliedJob => appliedJob.toString() === job._id.toString()) 
+                    ? 'Applied' 
+                    : 'Apply')}
+              </button>
             </div>
           ))
         ) : (
