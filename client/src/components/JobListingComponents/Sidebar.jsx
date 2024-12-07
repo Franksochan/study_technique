@@ -16,6 +16,8 @@ const Sidebar = () => {
           <li><a href='/profile'>Profile</a></li>
           <li><a href='/dashboard'>Dashboard</a></li>
           <li><a href='/settings'>Account Settings</a></li>
+          <li><a href='/messages'>Messages</a></li>
+          <li><a href='/notifications'>Notifications</a></li>
         </ul>
       </nav>
     </aside>
