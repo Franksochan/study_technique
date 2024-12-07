@@ -72,6 +72,17 @@ class UserController {
       next(error)
     }
   }
+
+  async getNotifications(req, res, next) {
+    try {
+      const { userId } = req.params
+      const userNotifications = await UserService.getNotifications(userId)
+      res.status(200).json({ userNotifications, message: 'Notifications fetched succesfully' })
+    } catch (error) {
+      logger.error(`Error getting notifications - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 

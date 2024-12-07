@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const Notification = require('../models/notification')
 const logger = require('../logger/logger')
 const bcrypt = require('bcrypt')
 const { findMissingParams } = require('../utils/paramsValidator')
@@ -204,6 +205,26 @@ class UserService {
 
       await user.save()
 
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async getNotifications(userId) {
+    try {
+      const requiredParams = { userId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 400, message: 'Failed to get notifications - user id is not defined'}
+      }
+
+      const userNotifications = await Notification.findOne({ user: userId })
+
+      if (!userNotifications) {
+        throw { status: 200, message: 'No notifications available'}
+      }
+      
+      return userNotifications
     } catch (error) {
       throw new Error(error.message)
     }

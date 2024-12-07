@@ -8,5 +8,6 @@ router.delete('/unfollow-user/:userId/:unfollowId', UserController.unfollowUser)
 router.post('/add-bio/:userId', UserController.addBio)
 router.post('/add-link/:userId', UserController.addLink)
 router.put('/change-password/:userId', UserController.changePassword)
+router.get('/notifications/:userId', UserController.getNotifications)
 
 module.exports = router
