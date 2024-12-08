@@ -10,6 +10,7 @@ const JobApplicationPage = () => {
   const [resume, setResume] = useState(null)
   const [coverLetter, setCoverLetter] = useState('')
   const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(falses)
   const userId = localStorage.getItem('userID')
   const navigate = useNavigate()
 
@@ -42,6 +43,7 @@ const JobApplicationPage = () => {
       setError('Please upload your resume')
       return
     }
+    setIsLoading(true)
     try {
       const formData = new FormData()
       formData.append('file', resume)
@@ -62,6 +64,8 @@ const JobApplicationPage = () => {
       if (error.response) {
         setError(error.response.data.error.message)
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -108,7 +112,7 @@ const JobApplicationPage = () => {
 
             {error && <p className="error">{error}</p>} 
 
-            <button type="submit">Submit Application</button>
+            <button type="submit">{ isLoading ? 'Submitting' : 'Submit Application' }</button>
           </form>
         </main>
       ) : (
