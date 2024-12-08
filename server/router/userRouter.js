@@ -9,5 +9,6 @@ router.post('/add-bio/:userId', UserController.addBio)
 router.post('/add-link/:userId', UserController.addLink)
 router.put('/change-password/:userId', UserController.changePassword)
 router.get('/notifications/:userId', UserController.getNotifications)
+router.post('/upload-profile-pic/:userId', UserController.uploadUserProfilePic)
 
 module.exports = router

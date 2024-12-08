@@ -83,6 +83,19 @@ class UserController {
       next(error)
     }
   }
+
+  async uploadUserProfilePic(req, res, next) {
+    try {
+      const { base64Image } = req.body
+      const userId = req.params.userId
+
+      const resizedImage = await UserService.uploadUserProfilePic(base64Image, userId)
+      res.status(200).json({ resizedImage, msg: 'Profile picture uploaded succesfully' })
+    } catch (error) {
+      logger.error(`Error changing profile picture - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 

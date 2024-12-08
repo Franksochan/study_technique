@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const { findMissingParams } = require('../utils/paramsValidator')
 const PasswordService = require('./passwordService')
 const EmailService = require('./emailService')
+const sharp = require('sharp')
 
 class UserService {
   async fetchUser(userId) {
@@ -225,6 +226,56 @@ class UserService {
       }
       
       return userNotifications
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async uploadUserProfilePic (base64Image, userId) {
+  
+    try {
+      const requiredParams = { base64Image, userId } 
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 404, message: 'Image and user id is both required'}
+      }
+
+      const user = await User.findById(userId)
+      if (!user) {
+        throw { status: 404, message: 'User is not found' }
+      }
+      // Allowed image formats
+      const allowedFormats = ['jpeg', 'jpg', 'png']
+       // Detect the image format from base64 string
+      const detectedFormat = base64Image.match(/^data:image\/(\w+);base64,/)
+      const imageFormat = detectedFormat ? detectedFormat[1] : null
+  
+        // Check if image format is supported
+      if (!imageFormat || !allowedFormats.includes(imageFormat.toLowerCase())) {
+        throw { status: 400, message: 'Unsupported image format. Please upload a JPEG, JPG, or PNG image.' }
+      }
+  
+       // Convert base64 image to buffer
+      const imageBuffer = Buffer.from(base64Image.split(',')[1], 'base64')
+  
+      // Resize the image
+      const resizedImage = await sharp(imageBuffer)
+        .resize({
+          fit: 'cover',
+          width: 200,
+          height: 200,
+          withoutEnlargement: true,
+        })
+        .toFormat(imageFormat)
+        .toBuffer()
+  
+      // Convert resized image buffer to base64
+      const resizedImageBase64 = `data:image/${imageFormat};base64,${resizedImage.toString('base64')}`
+  
+      // Update user profile picture in the database
+      await User.findOneAndUpdate(user, { profilePic: resizedImageBase64 })
+
+      return { resizedImage: resizedImageBase64 }
     } catch (error) {
       throw new Error(error.message)
     }
