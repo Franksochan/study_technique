@@ -1,0 +1,183 @@
+/* ApplicantProfilePage.css */
+
+.applicant-profile-page {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background: linear-gradient(135deg, #222, #1a1a1a); /* Dark gradient background */
+  font-family: 'Poppins', sans-serif;
+}
+
+.profile-container {
+  flex: 4;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.profile-container .back-button {
+  align-self: flex-start;
+  padding: 10px 15px;
+  background: linear-gradient(135deg, #444, #222); /* Dark gradient for button */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Dark shadow */
+  transition: background 0.3s, transform 0.2s;
+}
+
+.back-button:hover {
+  background: linear-gradient(135deg, #555, #333); /* Darker gradient on hover */
+  transform: translateY(-2px);
+}
+
+.profile-header {
+  width: 100%;
+  margin-bottom: 20px;
+  position: relative;
+  background: rgba(30, 30, 30, 0.9); /* Slight transparency with dark background */
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Dark shadow */
+}
+
+.profile-banner {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(135deg, #444, #333); /* Dark gradient background */
+}
+
+.profile-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8; /* Slight opacity for image */
+}
+
+.profile-info {
+  padding: 20px;
+  text-align: center;
+}
+
+.profile-pic-wrapper {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: -60px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6); /* Dark shadow */
+}
+
+.profile-pic {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #555, #222); /* Gradient background for profile pic */
+  border: 1px solid white;
+}
+
+.profile-name {
+  font-size: 24px;
+  font-weight: 700;
+  margin-top: 10px;
+  color: white; /* White text color */
+}
+
+.profile-email,
+.profile-location {
+  font-size: 16px;
+  color: #aaa; /* Light grey for secondary text */
+  margin: 5px 0;
+}
+
+.social-links {
+  margin-top: 20px;
+}
+
+.social-icon {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+.social-icon img {
+  width: 30px;
+  height: 30px;
+}
+
+.no-social-links {
+  color: #999; /* Slightly muted grey */
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.profile-main {
+  width: 100%;
+  max-width: 900px;
+  margin-top: 40px;
+}
+
+.bio-section {
+  background: linear-gradient(135deg, #333, #222); /* Dark gradient background */
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6); /* Inner dark shadow */
+}
+
+.bio-section h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #ccc; /* Light grey for headings */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 5px;
+}
+
+.bio-section p {
+  font-size: 16px;
+  color: white; /* White text for bio content */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-banner {
+    height: 150px;
+  }
+
+  .profile-info {
+    text-align: center;
+  }
+
+  .profile-name {
+    font-size: 20px;
+  }
+
+  .profile-email,
+  .profile-location {
+    font-size: 14px;
+  }
+
+  .social-links {
+    margin-top: 10px;
+  }
+
+  .bio-section {
+    margin-top: 20px;
+  }
+
+  .profile-main {
+    width: 100%;
+    margin-top: 20px;
+  }
+}
