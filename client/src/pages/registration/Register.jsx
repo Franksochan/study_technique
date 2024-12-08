@@ -21,13 +21,17 @@ const Registration = () => {
   })
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
     api
       .get('https://psgc.gitlab.io/api/provinces/')
       .then(response => {
-        setProvinces(response.data)
+        const sortedProvinces = response.data.sort((a, b) =>
+          a.name.localeCompare(b.name) 
+        )
+        setProvinces(sortedProvinces)
         setLoading(false)
       })
       .catch(error => {
@@ -43,7 +47,10 @@ const Registration = () => {
       api
         .get(`https://psgc.gitlab.io/api/provinces/${registrationData.selectedProvince}/municipalities/`)
         .then(response => {
-          setMunicipalities(response.data)
+          const sortedMunicipalities = response.data.sort((a, b) =>
+            a.name.localeCompare(b.name) 
+          )
+          setMunicipalities(sortedMunicipalities)
         })
         .catch(error => {
           setError('Failed to load cities.')
@@ -94,6 +101,7 @@ const Registration = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true)
       const response = await api.post('auth/registration', {
         firstName: registrationData.firstName,
         middleName: registrationData.middleName,
@@ -117,6 +125,8 @@ const Registration = () => {
       } else {
         alert('An error occurred. Please try again.')
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -193,7 +203,7 @@ const Registration = () => {
             }            
           </form>
           <div className="form-footer">
-            <button onClick={handleSubmit}>Register</button>
+            <button onClick={handleSubmit}>{ isLoading ? 'Registering...' : 'Register' }</button>
             <button onClick={() => navigateToLogin()}>Back to Login</button>
         </div>
       </div>
