@@ -10,6 +10,7 @@
   padding: 20px;
   background-color: #f7f7f7;
   overflow-y: auto;
+  max-height: calc(100vh - 40px);
 }
 
 .applicants-container h1 {
@@ -39,6 +40,7 @@
 .applicant-card h3 {
   font-size: 1.5rem;
   color: #1E1D1D;
+  cursor: pointer;
 }
 
 .applicant-card p {
