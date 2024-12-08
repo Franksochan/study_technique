@@ -53,8 +53,57 @@ class EmailService {
       throw new Error('Failed to send application notification email.')
     }
   }
-  
 
+  async notifyEmployerAboutCandidate(employerName, employerEmail, applicantFullName, applicantEmail, jobTitle) {
+    try {
+      const mailOptions = {
+        from: process.env.USER,
+        to: employerEmail,
+        subject: 'Details of Your Chosen Candidate',
+        html: `
+          <p>Dear ${employerName},</p>
+          <p>You have successfully chosen a candidate for the position of <strong>${jobTitle}</strong>.</p>
+          <p>Here are the details of the selected applicant:</p>
+          <ul>
+            <li><strong>Name:</strong> ${applicantFullName}</li>
+            <li><strong>Email:</strong> ${applicantEmail}</li>
+          </ul>
+          <p>Thank you for using our platform to find the right talent for your team.</p>
+          <p>Best regards,</p>
+          <p>Lumikha</p>
+        `,
+      }
+  
+      await this.transporter.sendMail(mailOptions)
+    } catch (error) {
+      logger.error('Error notifying employer about chosen candidate:', error)
+      throw new Error('Failed to send employer notification email.')
+    }
+  }  
+
+  async sendJobOfferEmail(employerName, employerEmail, applicantName, applicantEmail, jobTitle) {
+    try {
+      const mailOptions = {
+        from: process.env.USER,
+        to: applicantEmail,
+        subject: 'Congratulations! You’ve Received a Job Offer',
+        html: `
+          <p>Dear ${applicantName},</p>
+          <p>We are excited to inform you that you have been offered the position of <strong>${jobTitle}</strong>!</p>
+          <p>This offer is extended by <strong>${employerName}</strong> (${employerEmail}).</p>
+          <p>We look forward to having you on the team!</p>
+          <p>Best regards,</p>
+          <p>Lumikha</p>
+        `,
+      }
+  
+      await this.transporter.sendMail(mailOptions);
+    } catch (error) {
+      logger.error('Error sending job offer email:', error.message)
+      throw new Error('Failed to send job offer email.')
+    }
+  }  
+  
   generateVerificationCode() {
     return crypto.randomBytes(3).toString('hex')
   }
