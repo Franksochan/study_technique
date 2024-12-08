@@ -20,8 +20,8 @@ class JobController {
     try {
       const { jobCategory } = req.params
   
-      const jobs = await JobService.fetchJob(jobCategory)
-      res.status(200).json({ jobs: jobs, message: `Jobs fetched succesfully`})
+      const filteredJobs = await JobService.fetchJob(jobCategory)
+      res.status(200).json({ jobs: filteredJobs, message: `Jobs fetched succesfully`})
     } catch (error) {
       logger.error(`Error fetching the jobs - ${error.message}`)
       next(error)

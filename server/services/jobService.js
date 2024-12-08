@@ -112,9 +112,11 @@ class JobService {
       if (!jobs || jobs.length === 0) {
         throw { status: 204, message: 'Job category currently has no jobs' }
       }
+
+      const filteredJobs = jobs.filter(job => job.status === 'open')
     
       // Return the jobs to the user
-      return jobs
+      return filteredJobs
     } catch (error) {
       throw new Error(error.message)
     }
@@ -203,7 +205,7 @@ class JobService {
 
       // Fetch the applications associated with the job and populate applicant data
       const applications = await Application.find({ job: jobId })
-        .populate('applicant', 'firstName middleName lastName email') // Populate user details (first name, middle name, last name, email)
+        .populate('applicant', '_id firstName middleName lastName email') // Populate user details (first name, middle name, last name, email)
         .exec()
 
       // If no applications are found
@@ -213,6 +215,7 @@ class JobService {
 
       // Map the applications to include relevant information
       const applicants = applications.map(application => ({
+        _id: application.applicant._id,
         applicantName: `${application.applicant.firstName} ${application.applicant.middleName} ${application.applicant.lastName}`,
         applicantEmail: application.applicant.email, // Include applicant email
         resumeLink: application.resumeLink,
