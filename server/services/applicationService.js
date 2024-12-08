@@ -129,6 +129,85 @@ class ApplicationService {
       throw { statusCode: error.statusCode || 500, message: error.message || 'Server Error' }
     }
   }
+
+  async offerJob(jobId, applicantId) {
+    try {
+      const requiredParams = { jobId, applicantId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 404, message: 'Missing required parameters' }
+      }
+  
+      const job = await Job.findById(jobId).populate('postedBy', 'email title firstName middleName lastName')
+      if (!job) {
+        throw { status: 400, message: 'Job is not found' }
+      }
+  
+      const applicant = await User.findById(applicantId)
+      if (!applicant) {
+        throw { status: 400, message: 'Applicant is not found' }
+      }
+  
+      const jobPosterName = `${job.postedBy.firstName} ${job.postedBy.middleName} ${job.postedBy.lastName}`
+      const applicantFullName = `${applicant.firstName} ${applicant.middleName} ${applicant.lastName}`
+  
+      // Notify the chosen applicant (Offer notification)
+      await EmailService.sendJobOfferEmail(
+        jobPosterName, // Employer name
+        job.postedBy.email, // Employer email
+        applicantFullName, // Applicant name
+        applicant.email, // Applicant email
+        job.title // Job title
+      )
+  
+      // Notify the employer about the chosen applicant
+      await EmailService.notifyEmployerAboutCandidate(
+        jobPosterName, // Employer name
+        job.postedBy.email, // Employer email
+        applicantFullName, // Applicant name
+        applicant.email, // Applicant email
+        job.title // Job title
+      )
+  
+      // Change the status of the chosen applicant's application to 'offered'
+      const chosenApplication = await Application.findOne({ job: jobId, applicant: applicantId })
+      if (chosenApplication) {
+        chosenApplication.status = 'accepted'
+        await chosenApplication.save()
+      }
+  
+      // Change the job status to 'closed'
+      job.status = 'closed'
+      await job.save()
+  
+      // Notify the other applicants that they weren't chosen and update their status to 'rejected'
+      const otherApplications = await Application.find({ job: jobId, status: 'pending' })
+      
+      for (const application of otherApplications) {
+        const otherApplicant = await User.findById(application.applicant)
+        if (otherApplicant) {
+          // Create a rejection notification
+          const notification = new Notification({
+            user: otherApplicant._id,
+            message: `We regret to inform you that your application for the job '${job.title}' has not been selected.`,
+            type: 'alert',
+          })
+          await notification.save()
+  
+          // Save the notification to the applicant's notifications
+          otherApplicant.notifications.push(notification._id)
+          await otherApplicant.save()
+  
+          // Update the application status to 'rejected'
+          application.status = 'rejected'
+          await application.save()
+        }
+      }
+  
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }  
 }
 
 module.exports = new ApplicationService()

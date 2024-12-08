@@ -17,6 +17,17 @@ class ApplicationController {
       next(error)
     }
   }
+
+  async offerJob(req, res, next) {
+    try {
+      const { jobId, applicantId } = req.params
+      await ApplicationService.offerJob(jobId, applicantId) 
+      res.status(200).json({ message: 'Offered the job succesfully, confirmation email for both sides has been sent' })
+    } catch (error) {
+      logger.error(`Offer error - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 module.exports = new ApplicationController()
