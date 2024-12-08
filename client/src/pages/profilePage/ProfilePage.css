@@ -17,6 +17,13 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .back-button {
   position: absolute;
   top: 20px;
@@ -31,6 +38,17 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   transition: background 0.3s, transform 0.2s;
 }
+.profile-info img {
+  margin-bottom: 12px;
+}
+
+.profile-info h1{
+  margin-bottom: 0;
+}
+
+.profile-info p{
+  margin-bottom: 0;
+}
 
 .back-button:hover {
   background: linear-gradient(135deg, #555, #333);
@@ -40,6 +58,10 @@ body {
 
 /* Profile Header */
 .profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   margin-bottom: 40px;
   position: relative;
@@ -239,22 +261,6 @@ body {
   text-decoration: underline;
 }
 
-/* Add Link Button */
-.add-link-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-top: 8px;
-}
-
-.add-link-button:hover {
-  background-color: #218838;
-}
-
 /* Add Link Form */
 .add-link-form {
   display: flex;
@@ -293,4 +299,69 @@ body {
 
 .save-link-button:hover {
   background-color: #0056b3;
+}
+
+/* Profile Page CSS */
+
+/* Form styles */
+.upload-pic-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Button container styles */
+.upload-btn-choices {
+  display: flex;
+  gap: 10px; /* Add spacing between the buttons */
+}
+
+/* Button styles */
+.upload-btn-choices button,
+.change-pic-btn,
+.edit-button,
+.add-link-button {
+  background-color: #007bff; /* Primary button color */
+  color: #fff; /* White text for contrast */
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover effect */
+.upload-btn-choices button:hover,
+.change-pic-btn:hover,
+.edit-button:hover,
+.add-link-button:hover {
+  background-color: #0056b3; /* Darker shade of blue for hover */
+}
+
+/* Cancel button specific */
+.upload-btn-choices button:nth-child(2) {
+  background-color: #dc3545; /* Danger color for cancel */
+}
+
+.upload-btn-choices button:nth-child(2):hover {
+  background-color: #b02a37; /* Darker red on hover */
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .upload-pic-form {
+    padding: 10px;
+  }
+
+  .upload-btn-choices button,
+  .change-pic-btn {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
 }

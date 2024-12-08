@@ -5,6 +5,8 @@ import "./ProfilePage.css"
 
 const ProfilePage = () => {
   const [user, setUser] = useState(null)
+  const [ isUploading, setIsUploading ] = useState(false)
+  const [ base64Image, setBase64Image ] = useState('')
   const [bio, setBio] = useState("")
   const [isEditingBio, setIsEditingBio] = useState(false)
   const [socialLinks, setSocialLinks] = useState({
@@ -31,6 +33,7 @@ const ProfilePage = () => {
       if (response.status === 200) {
         setUser(response.data.user)
         setSocialLinks(response.data.user.socialLinks || {})
+        setBio(response.data.user.bio)
       }
     } catch (error) {
       alert("Failed to fetch user data.")
@@ -42,7 +45,6 @@ const ProfilePage = () => {
       const response = await api.post(`user/add-bio/${userId}`, { newBio: bio })
       if (response.status === 200) {
         setIsEditingBio(false)
-        alert("Bio updated!")
       }
     } catch (error) {
       alert("Failed to update bio.")
@@ -76,6 +78,42 @@ const ProfilePage = () => {
     }
   }
 
+  const handleSubmission = async (e) => {
+    e.preventDefault()
+
+    try {
+      const response = await api.post(`/user/upload-profile-pic/${userId}`, {
+        base64Image: base64Image
+      }, { withCredentials: true })
+
+      if (response.status === 200) {
+        alert('Profile picture changed succesfully. Refresh the page to see changes')
+        setIsUploading(false)
+      }
+    } catch (err) {
+      alert(err.response.data.error)
+      console.error("Error uploading profile picture:", err)
+    }
+  }
+
+  const convertToBase64 = (e) => {
+    const file = e.target.files[0]
+
+    if (file) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+
+      reader.onload = () => {
+        console.log(reader.result)
+        setBase64Image(reader.result)
+      }
+
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error)
+      }
+    }
+  }
+
   return (
     <div className="profile-page">
       <button className="back-button" onClick={() => navigate("/job-listings")}>
@@ -93,13 +131,33 @@ const ProfilePage = () => {
             </div>
             <div className="profile-info">
               <img
-                src={user.profilePic || "empty dp.jpg"}
+                src={user?.profilePic ? user?.profilePic : "empty dp.jpg"}
                 alt="Profile"
                 className="profile-pic"
               />
-              <h1 className="profile-name">{user.name}</h1>
-              <p className="profile-email">{user.email}</p>
-              <p className="profile-location">{user.location}</p>
+              { isUploading ? (
+                <form className="upload-pic-form" onSubmit={handleSubmission}>
+                  <input
+                    type="file"
+                    accept=".jpeg, .jpg, .png"
+                    onChange={convertToBase64}
+                  />
+                  <div className="upload-btn-choices">
+                    <button type="submit">Upload</button>
+                    <button onClick={() => setIsUploading(false)}>Cancel</button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  className="change-pic-btn"
+                  onClick={() => setIsUploading(true)}
+                >
+                  Change Profile Picture
+                </button>
+              )}
+              <h1 className="profile-name">{user?.name}</h1>
+              <p className="profile-email">{user?.email}</p>
+              <p className="profile-location">{user?.location}</p>
             </div>
           </header>
 
@@ -123,7 +181,7 @@ const ProfilePage = () => {
                 </div>
               ) : (
                 <div className="bio-content">
-                  <p>{user.bio || "Add a bio to tell more about yourself."}</p>
+                  <p>{bio || "Add a bio to tell more about yourself."}</p>
                   <button
                     onClick={() => setIsEditingBio(true)}
                     className="edit-button"
