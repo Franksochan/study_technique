@@ -9,6 +9,7 @@ const JobApplicants = () => {
   const [applicants, setApplicants] = useState([])
   const [loading, setLoading] = useState({}) // Track loading state for each applicant
   const navigate = useNavigate()
+  const [showSidebar, setShowSidebar] = useState(false)
 
   useEffect(() => {
     const fetchApplicants = async () => {
@@ -49,7 +50,7 @@ const JobApplicants = () => {
 
   return (
     <div className="view-applicants-page">
-      <Sidebar /> {/* Assuming Sidebar component is already created */}
+      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> 
 
       <div className="applicants-container">
         <h1>Applicants for Job</h1>

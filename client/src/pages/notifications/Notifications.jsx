@@ -9,6 +9,7 @@ const NotificationPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const { userId } = useParams()  // Get userId from URL params
+  const [showSidebar, setShowSidebar] = useState(false)
 
   // API endpoint for fetching notifications
   const fetchNotifications = async () => {
@@ -37,7 +38,7 @@ const NotificationPage = () => {
   }
   return (
     <div className="notification-page">
-      <Sidebar />
+      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> 
       <main className="notification-content">
         <h2 className="notification-title">Notifications</h2>
         <div className="notification-list">

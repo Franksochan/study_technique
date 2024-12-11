@@ -240,12 +240,6 @@ const ProfilePage = () => {
               )}
             </section>
 
-            <section className="connections-section card">
-              <h2 className="section-title">Connections</h2>
-              <p>{user.followers.length} Followers</p>
-              <p>{user.following.length} Following</p>
-            </section>
-
             <section className="additional-info-section card">
               <p>Joined on: {new Date(user.joinedDate).toLocaleDateString()}</p>
             </section>

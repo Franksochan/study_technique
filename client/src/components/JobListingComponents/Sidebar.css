@@ -1,25 +1,40 @@
-.sidebar {
-  flex: 1;
+.sidebar.collapsed {
+  position: fixed; 
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;  
+}
+
+.sidebar.expanded {
+  position: fixed; 
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 80px;  
   background-color: #333;
+  width: 250px;
   color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  height: 100vh;
+  height: 100%;
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2), 2px 0 4px rgba(0, 0, 0, 0.1);
   font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease-in-out;
 }
 
 .profile-section {
   text-align: center;
   margin-bottom: 30px;
+  cursor: pointer;  /* Add cursor pointer to indicate clickability */
 }
 
 .profile-icon {
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
 }
 
 .profile-name {
@@ -45,4 +60,4 @@
 
 .sidebar-menu a:hover {
   color: #ddd;
-}
+} 

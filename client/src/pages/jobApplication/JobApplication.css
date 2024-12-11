@@ -1,19 +1,25 @@
 .job-application-container {
-  display: flex;
   min-height: 100vh;
+  min-width: 100%;
   font-family: 'Poppins', sans-serif;
   color: #1E1D1D;  /* Color from your palette */
 }
 
 .job-application-section {
-  flex: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   padding: 20px;
   background-color: #f7f7f7;
   overflow-y: auto;
+  min-width: 100%;
 }
 
 .job-application-section header {
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-direction: column;
 }
 

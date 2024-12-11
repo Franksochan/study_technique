@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 import useUserData from '../../../hooks/useUserData'
+import Sidebar from './Sidebar'
 import './JobListing.css'
 import api from '../../../utils/api'
 
@@ -29,6 +30,7 @@ const JobListing = () => {
   const [jobs, setJobs] = useState([])
   const [showJobForm, setShowJobForm] = useState(false)
   const navigate = useNavigate()
+  const [showSidebar, setShowSidebar] = useState(false)
   const [newJob, setNewJob] = useState({
     title: '',
     description: '',
@@ -103,6 +105,7 @@ const JobListing = () => {
 
   return (
     <main className="job-listing-section">
+      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> 
       <header>
         <h1>
           Lumikha's Vita Craft

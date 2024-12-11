@@ -10,7 +10,7 @@ const JobApplicationPage = () => {
   const [resume, setResume] = useState(null)
   const [coverLetter, setCoverLetter] = useState('')
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(falses)
+  const [isLoading, setIsLoading] = useState(false)
   const userId = localStorage.getItem('userID')
   const navigate = useNavigate()
 
