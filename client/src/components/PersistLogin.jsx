@@ -3,7 +3,6 @@ import { Outlet, useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import useTokenRefresh from "../../hooks/useRefreshToken"
 import useAuth from "../../hooks/useAuth"
-import Spinner from "./Spinner/Spinner"
 
 const PersistLogin = () => {
   const [ isLoading, setIsLoading ] = useState(true)
@@ -15,9 +14,9 @@ const PersistLogin = () => {
     const verifyToken = async () => {
       try {
         await refreshAccessToken()
-      } catch (err) {
-        console.log(err)
-        navigate('/auth')
+      } catch (error) {
+        console.error("Token refresh failed:", error)
+        navigate('/login')
       } finally {
         setIsLoading(false)
       }
@@ -27,7 +26,7 @@ const PersistLogin = () => {
 
   return (
     <>
-      { isLoading ? <Spinner text={'Loading...'} /> : <Outlet />}
+      { isLoading ? 'Loading...' : <Outlet />}
     </>
   )
 }
