@@ -7,6 +7,7 @@ import './Login.css'
 const Login = () => {
   const [ loginData, setLoginData ] = useState({})
   const navigate = useNavigate()
+  const [error, setError] = useState(null)
   const { setAuth } = useAuth()
 
   const handleFieldChange = (e) => {
@@ -31,20 +32,23 @@ const Login = () => {
       return
     }
     try {
-      const response = await api.post('auth/login', { email: loginData.email, password: loginData.password })
+      const response = await api.post('auth/login', { email: loginData.email, password: loginData.password }, 
+        { withCredentials: true }
+      )
 
       if (response.status === 200) {
         console.log(response)
         const { userID,  accessToken } = response.data
-        setAuth({ accessToken })
+        console.log(accessToken)
+        setAuth({ accessToken: accessToken })
         localStorage.setItem('userID', userID)
         navigate('/job-listings')
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(error.response.data.error.message)
+        setError(error.response.data.error.message)
       } else {
-        alert('An error occurred. Please try again.')
+        setError('An error occurred. Please try again.')
       }
     }
   }
@@ -64,23 +68,29 @@ const Login = () => {
       <div className="login-form">
         <h1>Login</h1>
         <form>
+          <div class="input-wrapper">
             <input
-              type='text'
-              name='email'
-              placeholder='yourname@gmail.com'
-              onChange={handleFieldChange}
-              required
-
-            />
-            <input
-              type='password'
-              name='password'
-              placeholder='Password'
+              type="text"
+              name="email"
+              placeholder="yourname@gmail.com"
               onChange={handleFieldChange}
               required
             />
-          </form>
+            <span class="email-icon">&#9993;</span>
+          </div>
+          <div class="input-wrapper">
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleFieldChange}
+              required
+            />
+            <span class="password-icon">&#128272;</span> 
+          </div>
+        </form>
           <div className="form-footer">
+            {error && <p className="error-message">{error}</p>}
             <p>Forgot Password?</p>
             <button onClick={() => handleSubmit()}>Login</button>
             <p>Don't have an account yet?</p>
