@@ -39,17 +39,16 @@ class AuthController {
         secure: true,
         sameSite: 'none',
       })
-      
-      res.cookie('accessToken', accessToken, {
-          httpOnly: true,
-          secure: true,
-          sameSite: 'none',
-      })
+
+      res.cookie('accessToken', accessToken, { 
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none'
+      })  
 
       res.status(200).json({
           message: 'Login successful!',
           accessToken,
-          refreshToken,
           userID,
       })
     } catch (error) {
