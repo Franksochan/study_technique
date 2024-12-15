@@ -184,7 +184,7 @@ class AuthService {
       // Check if user's email is verified
       if (user.verificationCode !== null) {
         logger.warn(`Login attempt failed: User email is not verified - ${maskedEmail}`)
-        return res.status(400).json({ error: 'Please verify your email first' })
+        throw { status: 400, message: 'Please verify your email first' }
       }
 
       // Generate tokens
