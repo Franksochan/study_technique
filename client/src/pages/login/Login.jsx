@@ -91,7 +91,7 @@ const Login = () => {
         </form>
           <div className="form-footer">
             {error && <p className="error-message">{error}</p>}
-            <p>Forgot Password?</p>
+            <p className='forgot-password' onClick={() => navigate('/forgot-password')}>Forgot Password?</p>
             <button onClick={() => handleSubmit()}>Login</button>
             <p>Don't have an account yet?</p>
             <button onClick={() => navigateToRegistration()}>Sign in</button>

@@ -125,3 +125,11 @@
 .error-message {
   color: rgb(178, 4, 4);
 }
+
+.forgot-password {
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
