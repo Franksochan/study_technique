@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import SuccessAlert from '../../components/Alerts/SuccessAlert/SuccessAlerts'
 import api from '../../../utils/api'
 import './Verification.css'
 
@@ -9,6 +10,7 @@ const Verification = () => {
   const [loading, setLoading] = useState(false)
   const { email } = useParams()
   const navigate = useNavigate()
+  const [ successMsg, setSuccessMsg ] = useState(null)
 
   const handleInputChange = (e) => {
     setVerificationCode(e.target.value)
@@ -20,8 +22,10 @@ const Verification = () => {
     try {
       const response = await api.post(`/auth/verify-email/${email}`, { verificationCode })
       if (response.status === 200) {
-        alert('Verification successful!')
-        navigate('/login') 
+        setSuccessMsg('Verification Succesful!')
+        setTimeout(() => {
+          navigate('/login')
+        }, 3000) 
       }
     } catch (err) {
       setError('Invalid verification code. Please try again.')
@@ -32,6 +36,7 @@ const Verification = () => {
 
   return (
     <div className="verification-page">
+      { successMsg && <SuccessAlert message={successMsg} onClose={() => setSuccessMsg(null)} /> }
       <h1 className="lumikha-sign">LUMIKHA</h1>
       <div className="verification-form">
         <h1>Email Verification</h1>

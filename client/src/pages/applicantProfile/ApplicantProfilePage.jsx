@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import api from "../../../utils/api"
+import usePrivateApi from "../../../hooks/usePrivateApi"
 import Sidebar from "../../components/JobListingComponents/Sidebar"
 import "./ApplicantProfilePage.css"
 
 const ApplicantProfilePage = () => {
   const { applicantId, jobId } = useParams()
   const [applicant, setApplicant] = useState(null)
+  const privateAxios = usePrivateApi()
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchApplicant = async () => {
       try {
-        const response = await api.get(`/user/get-user/${applicantId}`)
+        const response = await privateAxios.get(`/user/get-user/${applicantId}`)
         if (response.status === 200) {
           setApplicant(response.data.user)
         }
@@ -58,7 +59,7 @@ const ApplicantProfilePage = () => {
       <Sidebar />
       <div className="profile-container">
         <button className="back-button" onClick={() => navigate(`/applicants/${jobId}`)}>
-          Back to Applicants List
+          Back To Applicants
         </button>
 
         {applicant ? (

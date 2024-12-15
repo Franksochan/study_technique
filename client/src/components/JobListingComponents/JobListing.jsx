@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import useUserData from '../../../hooks/useUserData'
 import Sidebar from './Sidebar'
 import './JobListing.css'
-import api from '../../../utils/api'
+import usePrivateApi from '../../../hooks/usePrivateApi'
+import SuccessAlert from '../Alerts/SuccessAlert/SuccessAlerts'
+import ErrorAlert from '../Alerts/ErrorAlert/ErrorAlerts'
 
 const JOB_TYPES = [
   'Computer Science and IT',
@@ -31,6 +33,8 @@ const JobListing = () => {
   const [showJobForm, setShowJobForm] = useState(false)
   const navigate = useNavigate()
   const [showSidebar, setShowSidebar] = useState(false)
+  const [successMsg, setSuccessMsg] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
   const [newJob, setNewJob] = useState({
     title: '',
     description: '',
@@ -40,6 +44,7 @@ const JobListing = () => {
     type: '',
   })
   const userID = localStorage.getItem('userID')
+  const privateAxios = usePrivateApi()
 
   const { user } = useUserData()
 
@@ -51,15 +56,16 @@ const JobListing = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await api.get(`job/get-jobs/${encodeURIComponent(selectedJobType)}`)
+      const response = await privateAxios.get(`job/get-jobs/${encodeURIComponent(selectedJobType)}`)
       if (response.status === 200) {
+        console.log(response.data.jobs)
         setJobs(response.data.jobs)
       }
     } catch (error) {
       if (error.response && error.response.data) {
         setJobs('')
       } else {
-        alert('An error occurred. Please try again.')
+        setErrorMsg('An error occurred. Please try again.')
       }
     }
   }
@@ -85,7 +91,7 @@ const JobListing = () => {
   const handleJobSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await api.post(`job/create-job/${userID}`, newJob)
+      const response = await privateAxios.post(`job/create-job/${userID}`, newJob)
       if (response.status === 201) {
         setShowJobForm(false) 
         setNewJob({
@@ -95,16 +101,18 @@ const JobListing = () => {
           deadline: '',
           maxApplicants: '',
         }) 
-        alert(response.data.message)
+        setSuccessMsg(response.data.message)
         fetchJobs() 
       }
     } catch (error) {
-      alert('Error creating job listing. Please try again.')
+      setErrorMsg(error.response.data.error.message)
     }
   }
 
   return (
     <main className="job-listing-section">
+      { successMsg && <SuccessAlert message={successMsg} onClose={() => setSuccessMsg(null)} /> }
+      { errorMsg && <ErrorAlert message={errorMsg} onClose={() => setErrorMsg(null)} />}
       <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} /> 
       <header>
         <h1>
@@ -154,15 +162,16 @@ const JobListing = () => {
               <button 
                 className="apply-btn" 
                 onClick={() => {
+                  console.log('Posted By:', job.postedBy, 'UserID:', userID);  // Debugging line
                   if (job.postedBy === userID) {
-                    navigate(`/applicants/${job._id}`);
+                    navigate(`/applicants/${job._id}`)
                   } else {
-                    navigate(`/apply/${job._id}`);
+                    navigate(`/apply/${job._id}`)
                   }
                 }}
                 disabled={user.appliedJobs && user.appliedJobs.some(appliedJob => appliedJob.toString() === job._id.toString())}
               >
-                {job.postedBy === userID 
+                {job.postedBy._id === userID 
                   ? 'View Your Applicants' 
                   : (user.appliedJobs && user.appliedJobs.some(appliedJob => appliedJob.toString() === job._id.toString()) 
                     ? 'Applied' 

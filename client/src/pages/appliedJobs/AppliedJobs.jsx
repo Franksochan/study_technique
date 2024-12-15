@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../../../utils/api'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 import Sidebar from '../../components/JobListingComponents/Sidebar'
 import './AppliedJobs.css'
 import { useParams } from 'react-router-dom'
@@ -12,10 +12,11 @@ const AppliedJobsPage = () => {
   const { userId } = useParams()
   const [showSidebar, setShowSidebar] = useState(false)
   const navigate = useNavigate()
+  const privateAxios = usePrivateApi()
 
   const fetchAppliedJobs = async () => {
     try {
-      const response = await api.get(`/user/get-user-applied-jobs/${userId}`)
+      const response = await privateAxios.get(`/user/get-user-applied-jobs/${userId}`)
 
       if (response.status === 200) {
         setAppliedJobs(response.data.jobs || [])

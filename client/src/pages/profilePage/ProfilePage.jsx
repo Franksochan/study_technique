@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import api from "../../../utils/api"
+import SuccessAlert from '../../components/Alerts/SuccessAlert/SuccessAlerts'
+import ErrorAlert from '../../components/Alerts/ErrorAlert/ErrorAlerts'
+import usePrivateApi from "../../../hooks/usePrivateApi"
 import "./ProfilePage.css"
 
 const ProfilePage = () => {
@@ -17,9 +19,11 @@ const ProfilePage = () => {
   const [isEditingLinks, setIsEditingLinks] = useState(false)
   const [newLinkPlatform, setNewLinkPlatform] = useState("")
   const [newLinkValue, setNewLinkValue] = useState("")
-
+  const privateAxios = usePrivateApi()
   const userId = localStorage.getItem("userID")
   const navigate = useNavigate()
+  const [ successMsg, setSuccessMsg ] = useState(null)
+  const [ errorMsg, setErrorMsg ] = useState(null)
 
   useEffect(() => {
     if (userId) {
@@ -29,25 +33,25 @@ const ProfilePage = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await api.get(`user/get-user/${userId}`)
+      const response = await privateAxios.get(`user/get-user/${userId}`,{}, { withCredentials: true } )
       if (response.status === 200) {
         setUser(response.data.user)
         setSocialLinks(response.data.user.socialLinks || {})
         setBio(response.data.user.bio)
       }
     } catch (error) {
-      alert("Failed to fetch user data.")
+      setErrorMsg("Failed to fetch user data.")
     }
   }
 
   const handleSaveBio = async () => {
     try {
-      const response = await api.post(`user/add-bio/${userId}`, { newBio: bio })
+      const response = await privateAxios.post(`user/add-bio/${userId}`, { newBio: bio })
       if (response.status === 200) {
         setIsEditingBio(false)
       }
     } catch (error) {
-      alert("Failed to update bio.")
+      setErrorMsg("Failed to update bio.")
     }
   }
 
@@ -57,7 +61,7 @@ const ProfilePage = () => {
       return
     }
     try {
-      const response = await api.post(`user/add-link/${userId}`, { platform: newLinkPlatform, link: newLinkValue })
+      const response = await privateAxios.post(`user/add-link/${userId}`, { platform: newLinkPlatform, link: newLinkValue })
 
       if (response.status === 200) {
         setSocialLinks((prevLinks) => ({
@@ -71,9 +75,9 @@ const ProfilePage = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(error.response.data.error.message)
+        setErrorMsg(error.response.data.error.message)
       } else {
-        alert('An error occurred. Please try again.')
+        setErrorMsg('An error occurred. Please try again.')
       }
     }
   }
@@ -82,16 +86,16 @@ const ProfilePage = () => {
     e.preventDefault()
 
     try {
-      const response = await api.post(`/user/upload-profile-pic/${userId}`, {
+      const response = await privateAxios.post(`/user/upload-profile-pic/${userId}`, {
         base64Image: base64Image
-      }, { withCredentials: true })
+      },{ withCredentials: true })
 
       if (response.status === 200) {
-        alert('Profile picture changed succesfully. Refresh the page to see changes')
+        setSuccessMsg('Profile picture changed succesfully. Refresh the page to see changes')
         setIsUploading(false)
       }
     } catch (err) {
-      alert(err.response.data.error)
+      setErrorMsg(err.response.data.error)
       console.error("Error uploading profile picture:", err)
     }
   }
@@ -116,6 +120,8 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page">
+      { successMsg && <SuccessAlert message={successMsg} onClose={() => setSuccessMsg(null)} /> }
+      { errorMsg && <ErrorAlert message={errorMsg} onClose={() => setErrorMsg(null)} />}
       <button className="back-button" onClick={() => navigate("/job-listings")}>
         Back to Vita Craft
       </button>
@@ -131,7 +137,7 @@ const ProfilePage = () => {
             </div>
             <div className="profile-info">
               <img
-                src={user?.profilePic ? user?.profilePic : "empty dp.jpg"}
+                src={user?.profilePic ? user?.profilePic : "/empty dp.jpg"}
                 alt="Profile"
                 className="profile-pic"
               />

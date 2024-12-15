@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { FaUser, FaEnvelope, FaLock, FaMapMarkerAlt } from 'react-icons/fa'
+import SuccessAlert from '../../components/Alerts/SuccessAlert/SuccessAlerts'
 import api from '../../../utils/api'
 import './Register.css'
 
@@ -20,9 +22,11 @@ const Registration = () => {
     selectedMunicipalityName: '',
   })
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
+  const [ successMsg, setSuccessMsg] = useState(null)
+  const [loading, setLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+
 
   useEffect(() => {
     api
@@ -42,7 +46,6 @@ const Registration = () => {
 
   useEffect(() => {
     if (registrationData.selectedProvince) {
-      console.log(registrationData.selectedProvince)
       setMunicipalities([])
       api
         .get(`https://psgc.gitlab.io/api/provinces/${registrationData.selectedProvince}/municipalities/`)
@@ -114,16 +117,16 @@ const Registration = () => {
       })
 
       if (response.status === 201) {
-        console.log(response)
-        alert(response.data.message)
-        console.log(response.data.message)
-        navigate(`/verify-email/${registrationData.email}`)
-      }
+        setSuccessMsg(response.data.message)
+        setTimeout(() => {
+          navigate(`/verify-email/${registrationData.email}`)
+        }, 3000)
+        }
     } catch (error) {
       if (error.response && error.response.data) {
-        alert(error.response.data.error.message)
+        setError(error.response.data.error.message)
       } else {
-        alert('An error occurred. Please try again.')
+        setError('An error occurred. Please try again.')
       }
     } finally {
       setIsLoading(false)
@@ -133,46 +136,65 @@ const Registration = () => {
   return (
     <>
       <div className="registration-page">
-      <h1 className='lumikha-sign' onClick={() => navigateToLandingPage()}>LUMIKHA</h1>
-      <div className="registration-form">
-        <h1>Register</h1>
-        <form>
-            <input
-              type='text'
-              name='firstName'
-              placeholder='First Name'
-              onChange={handleFieldChange}
-            />
-            <input
-              type='text'
-              name='middleName'
-              placeholder='Middle Name'
-              onChange={handleFieldChange}
-            />
-            <input
-              type='text'
-              name='lastName'
-              placeholder='Last Name'
-              onChange={handleFieldChange}
-            />
-            <input
-              type='text'
-              name='email'
-              placeholder='yourname@gmail.com'
-              onChange={handleFieldChange}
-            />
-            <input
-              type='password'
-              name='password'
-              placeholder='Password'
-              onChange={handleFieldChange}
-            />
-             <input
-              type='password'
-              name='passwordConfirmation'
-              placeholder='Confirm Password'
-              onChange={handleFieldChange}
-            />
+      { successMsg && <SuccessAlert message={successMsg} onClose={() => setSuccessMsg(null)} /> }
+        <h1 className='lumikha-sign' onClick={() => navigateToLandingPage()}>LUMIKHA</h1>
+        <div className="registration-form">
+          <h1>Register</h1>
+          <form>
+            <div className="input-field">
+              <span className="input-icon"><FaUser /></span>
+              <input
+                type='text'
+                name='firstName'
+                placeholder='    First Name'
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="input-field">
+              <span className="input-icon"><FaUser /></span>
+              <input
+                type='text'
+                name='middleName'
+                placeholder='    Middle Name'
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="input-field">
+              <span className="input-icon"><FaUser /></span>
+              <input
+                type='text'
+                name='lastName'
+                placeholder='    Last Name'
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="input-field">
+              <span className="input-icon"><FaEnvelope /></span>
+              <input
+                type='text'
+                name='email'
+                placeholder='    yourname@gmail.com'
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="input-field">
+              <span className="input-icon"><FaLock /></span>
+              <input
+                type='password'
+                name='password'
+                placeholder='    Password'
+                onChange={handleFieldChange}
+              />
+            </div>
+            <div className="input-field">
+              <span className="input-icon"><FaLock /></span>
+              <input
+                type='password'
+                name='passwordConfirmation'
+                placeholder='    Confirm Password'
+                onChange={handleFieldChange}
+              />
+            </div>
             <select
               name="selectedProvince"
               value={registrationData.selectedProvince}
@@ -186,27 +208,28 @@ const Registration = () => {
                 </option>
               ))}
             </select>
-            { registrationData.selectedProvince && 
-                <select
-                  name='selectedMunicipality'
-                  value={registrationData.selectedMunicipality}
-                  onChange={handleFieldChange}
-                  required
-                >
+            {registrationData.selectedProvince && (
+              <select
+                name='selectedMunicipality'
+                value={registrationData.selectedMunicipality}
+                onChange={handleFieldChange}
+                required
+              >
                 <option>Select Municipality</option>
                 {municipalities.map((municipality) => (
                   <option key={municipality.code} value={municipality.code}>
                     {municipality.name}
                   </option>
                 ))}
-                </select>
-            }            
+              </select>
+            )}
           </form>
+          {error && <p className="error-message">{error}</p>}
           <div className="form-footer">
-            <button onClick={handleSubmit}>{ isLoading ? 'Registering...' : 'Register' }</button>
+            <button onClick={handleSubmit}>{isLoading ? 'Registering...' : 'Register'}</button>
             <button onClick={() => navigateToLogin()}>Back to Login</button>
+          </div>
         </div>
-      </div>
       </div>
     </>
   )

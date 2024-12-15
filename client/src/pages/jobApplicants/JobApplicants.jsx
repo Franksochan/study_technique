@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import api from '../../../utils/api'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 import Sidebar from '../../components/JobListingComponents/Sidebar'
 import './JobApplicants.css'
 
@@ -10,11 +10,12 @@ const JobApplicants = () => {
   const [loading, setLoading] = useState({}) // Track loading state for each applicant
   const navigate = useNavigate()
   const [showSidebar, setShowSidebar] = useState(false)
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     const fetchApplicants = async () => {
       try {
-        const response = await api.get(`/job/get-job-applicants/${jobId}`)
+        const response = await privateAxios.get(`/job/get-job-applicants/${jobId}`)
         if (response.status === 200) {
           console.log(response.data.applicants)
           setApplicants(response.data.applicants)
@@ -30,7 +31,7 @@ const JobApplicants = () => {
   const handleOffer = async (applicantId) => {
     try {
       setLoading(prevState => ({ ...prevState, [applicantId]: true })) // Set loading for the specific applicant
-      const response = await api.post(`/application/offer-job/${jobId}/${applicantId}`)
+      const response = await privateAxios.post(`/application/offer-job/${jobId}/${applicantId}`)
       if (response.status === 200) {
         alert('Job offered successfully!')
 

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import './JobApplication.css'
 import Sidebar from '../../components/JobListingComponents/Sidebar'
-import api from '../../../utils/api'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 
 const JobApplicationPage = () => {
   const { jobId } = useParams()
@@ -13,11 +13,12 @@ const JobApplicationPage = () => {
   const [isLoading, setIsLoading] = useState(false)
   const userId = localStorage.getItem('userID')
   const navigate = useNavigate()
+  const privateAxios = usePrivateApi()
 
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await api.get(`job/get-job-details/${jobId}`)
+        const response = await privateAxios.get(`job/get-job-details/${jobId}`)
         if (response.status === 200) {
           setJobDetails(response.data.job)
         }
@@ -49,7 +50,7 @@ const JobApplicationPage = () => {
       formData.append('file', resume)
       formData.append('coverLetter', coverLetter)
 
-      const response = await api.post(`application/apply-job/${jobId}/${userId}`, formData, { 
+      const response = await privateAxios.post(`application/apply-job/${jobId}/${userId}`, formData, { 
         headers: {
           'Content-Type': 'multiform/data'
         }
@@ -85,6 +86,7 @@ const JobApplicationPage = () => {
             <p><strong>Skills Required:</strong> {jobDetails.skillsRequired?.join(', ')}</p>
             <p><strong>Deadline:</strong> {new Date(jobDetails.deadline).toLocaleDateString()}</p>
             <p><strong>Applicants:</strong> {jobDetails.applications.length}/{jobDetails.maxApplicants}</p>
+            <p className='job-poster-details' onClick={() => navigate(`/job-poster-profile/${jobDetails.postedBy._id}/${jobId}`)}><strong>Posted By:</strong> {jobDetails.postedBy.email}</p>
           </div>
 
           <form onSubmit={handleApplySubmit} className="application-form">
