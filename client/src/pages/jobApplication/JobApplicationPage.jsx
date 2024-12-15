@@ -77,7 +77,7 @@ const JobApplicationPage = () => {
         <main className="job-application-section">
           <header>
             <h1>Apply for Job: {jobDetails.title}</h1>
-            <button onClick={() => navigate('/job-listings')} className="back-button">Back to Job Listings</button>
+            <button onClick={() => navigate('/job-listings')} className="application-back-button">Back to Job Listings</button>
           </header>
 
           <div className="job-details">
