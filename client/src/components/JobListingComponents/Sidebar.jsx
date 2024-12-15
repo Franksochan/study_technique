@@ -27,6 +27,8 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             <li><a href='/profile'>Profile</a></li>
             <li><a href='/settings'>Account Settings</a></li>
             <li><a href={`/notifications/${userId}`}>Notifications</a></li>
+            <li><a href={`/applied-jobs/${userId}`}>Applied Jobs</a></li>
+            <li><a href={`/posted-jobs/${userId}`}>Posted Jobs</a></li>
             <li><a href='/login'>Logout</a></li>
           </ul>
         </nav>
