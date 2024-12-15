@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import api from '../../../utils/api'
+import usePrivateApi from '../../../hooks/usePrivateApi'
 import Sidebar from '../../components/JobListingComponents/Sidebar'
 import './Notifications.css'
 import { useParams } from 'react-router-dom'
@@ -10,11 +10,12 @@ const NotificationPage = () => {
   const [error, setError] = useState(null)
   const { userId } = useParams()  // Get userId from URL params
   const [showSidebar, setShowSidebar] = useState(false)
+  const privateAxios = usePrivateApi()
 
   // API endpoint for fetching notifications
   const fetchNotifications = async () => {
     try {
-      const response = await api.get(`user/notifications/${userId}`)  // Use dynamic userId
+      const response = await privateAxios.get(`user/notifications/${userId}`)  // Use dynamic userId
   
       if (response.status = 200) {
         console.log(response)
