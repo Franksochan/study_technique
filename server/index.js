@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 require('dotenv').config()
 
 const connectDB = require('./db/connect')
@@ -9,6 +10,7 @@ const authRoute = require('./router/authRoute')
 const userRoute = require('./router/userRouter')
 const jobRoute = require('./router/jobRoute')
 const applicationRoute = require('./router/applicationRoute')
+const tokenRoute = require('./router/tokenRoute')
 const errorHandler = require('./middleware/errorHandler')
 
 const app = express();
@@ -26,11 +28,13 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions))
+app.use(cookieParser())
 
 app.use('/auth', authRoute)
 app.use('/user', userRoute)
 app.use('/job', jobRoute)
 app.use('/application', applicationRoute)
+app.use('/token', tokenRoute)
 
 app.use(errorHandler)
  
