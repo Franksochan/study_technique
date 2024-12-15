@@ -176,7 +176,7 @@ class JobService {
         throw { status: 400, message: 'Missing required fields' }
       }
 
-      const job = await Job.findById(jobId).populate('postedBy', 'firstName middleName lastName email profilePic' )
+      const job = await Job.findById(jobId).populate('postedBy', '_id firstName middleName lastName email profilePic' )
 
       if (!job) {
         throw { status: 400, message: 'Error fetching job details: Job is not found'}
