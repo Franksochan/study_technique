@@ -1,5 +1,7 @@
 const User = require('../models/user')
 const Notification = require('../models/notification')
+const Job = require('../models/job')
+const Application = require('../models/application')
 const logger = require('../logger/logger')
 const bcrypt = require('bcrypt')
 const { findMissingParams } = require('../utils/paramsValidator')
@@ -277,6 +279,37 @@ class UserService {
 
       return { resizedImage: resizedImageBase64 }
     } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async getUserAppliedJobs (userId) {
+    try {
+      const requiredParams = { userId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 404, message: 'User ID is required' }
+      }
+
+      const user = await User.findById(userId)
+      if (!user) {
+        throw { status: 404, message: 'User is not found' }
+      }
+
+      const userApplications = await Application.find({ applicant: user._id });
+
+      if (!userApplications || userApplications.length === 0) {
+        throw { status: 200, message: 'User has no job applications' };
+      }
+
+      // Extract job IDs from the user's applications
+      const jobIds = userApplications.map(app => app.job)
+
+      // Fetch all jobs that match the job IDs
+      const jobsApplied = await Job.find({ _id: { $in: jobIds } })
+
+      return jobsApplied
+    } catch (error){
       throw new Error(error.message)
     }
   }

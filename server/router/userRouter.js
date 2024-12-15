@@ -10,5 +10,6 @@ router.post('/add-link/:userId', UserController.addLink)
 router.put('/change-password/:userId', UserController.changePassword)
 router.get('/notifications/:userId', UserController.getNotifications)
 router.post('/upload-profile-pic/:userId', UserController.uploadUserProfilePic)
+router.get('/get-user-applied-jobs/:userId', UserController.getUserAppliedJobs)
 
 module.exports = router
