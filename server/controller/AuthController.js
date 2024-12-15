@@ -56,6 +56,29 @@ class AuthController {
       next(error)
     }
   }
+
+  async forgotPassword(req, res, next) {
+    try {
+      const { email } = req.body
+      await AuthService.forgotPassword(email)
+      res.status(200).json({ message: 'Your request has been processed, please wait 5-10 mins for our email.' })
+    } catch (error) {
+      logger.error(`Error forgotting password - ${error.message}`)
+      next(error)
+    }
+  }
+
+  async resetPassword(req, res, next) {
+    try {
+      const { resetToken } = req.params
+      const { newPassword, newPasswordConfirmation } = req.body
+      await AuthService.resetPassword(resetToken, newPassword, newPasswordConfirmation)
+      res.status(200).json({ message: 'Password reset succesfully' })
+    } catch (error) {
+      logger.error(`Error resetting password - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 module.exports = new AuthController()

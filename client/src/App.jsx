@@ -20,6 +20,8 @@ const PostedJobsPage = lazy(() => import('./pages/postedJobs/PostedJobs'))
 const JobPosterProfile = lazy(() => import('./pages/jobPosterProfile/JobPosterProfile'))
 const HamsterWheel = lazy(() => import('./components/HamsterWheel/HamsterWheel'))
 const NotFoundPage = lazy(() => import('./pages/notFound/NotFound'))
+const ForgotPassword = lazy(() => import('./pages/forgotPassword/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/resetPassword/ResetPassword'))
 
 const App = () => {
   return (
@@ -32,6 +34,8 @@ const App = () => {
             <Route path='/register' element={ <Registration/> } />
             <Route path='/verify-email/:email' element={ <Verification/> } />
             <Route path='/hamster-wheel' element={ <HamsterWheel/>} />
+            <Route path='/forgot-password' element={ <ForgotPassword />} />
+            <Route path='/reset-password/:resetToken' element={ <ResetPassword />} />
             <Route element={<PersistLogin />}>
               <Route path='/job-listings' element={ <JobListingPage/> } />
               <Route path='/profile' element={ <ProfilePage/> } />

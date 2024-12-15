@@ -194,9 +194,67 @@ class AuthService {
       const accessToken = tokens.accessToken
       const refreshToken = tokens.refreshToken
 
-      return { accessToken, refreshToken, userID: user._id }
-  
       logger.info(`Login attempt succesful - ${maskedEmail}`)
+      return { accessToken, refreshToken, userID: user._id }
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+
+  async forgotPassword(email) {
+    try {
+      console.log(email)
+      // Check if user exists with the provided email
+      const user = await User.findOne({ email })
+  
+      if (!user) {
+        throw { status: 400, message: 'User is not found'}
+      }
+  
+      // Generate reset token
+      const resetToken = await EmailService.generateResetToken(user)
+  
+      // Save the reset token to the user object
+      user.resetPasswordToken = resetToken
+      await user.save()
+  
+      // Send reset password email
+      await EmailService.sendResetPasswordEmail(email, resetToken)
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+  
+  async resetPassword(resetToken, newPassword, newPasswordConfirmation) {
+    try {
+      console.log(resetToken, newPassword, newPasswordConfirmation)
+      // Find user by reset token
+      const user = await User.findOne({ resetPasswordToken: resetToken })
+  
+      if (!user) {
+        throw { status: 404, message: 'User is not found'}
+      }
+  
+      // Check if reset token has expired
+      if (user.resetPasswordExpires < Date.now()) {
+        throw { status: 400, message: 'Reset token has expired'}
+      }
+
+      // Check if passwords are matched
+      if (newPassword !== newPasswordConfirmation) {
+        throw { status: 400, message: 'Passwords dont match'}
+      }
+  
+      // Hash the password
+      const hashedPassword = await PasswordService.hashPassword(newPassword)
+      logger.info('Password hashed successfully')
+  
+      // Update user's password
+      user.password = hashedPassword
+      // Clear reset token and expiration time
+      user.resetPasswordToken = undefined
+      user.resetPasswordExpires = undefined
+      await user.save()
     } catch (error) {
       throw new Error(error.message)
     }
