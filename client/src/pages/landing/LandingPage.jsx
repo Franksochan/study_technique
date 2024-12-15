@@ -5,8 +5,8 @@ const LandingPage = () => {
 
   const navigate = useNavigate()
 
-  const navigateToAuth = () => {
-    navigate('/login')
+  const navigateToHamsterWheel = () => {
+    navigate('/hamster-wheel')
   }
 
   return ( 
@@ -18,7 +18,7 @@ const LandingPage = () => {
           Empowering Filipino freelancers and clients to collaborate and succeed together.<br />
           Join us in building a thriving freelance community!
         </p>
-        <button onClick={() => navigateToAuth()}>Get Started</button>
+        <button onClick={() => navigateToHamsterWheel()}>Get Started</button>
       </div>
       <div className='hero-section'>
         <img className='hero-image' src='hero.png' alt='hero-image'/>
