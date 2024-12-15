@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
+const logger = require('../logger/logger')
 
 const generateTokens = (user) => {
   // Retrieve the secret key from environment variables
@@ -9,14 +10,14 @@ const generateTokens = (user) => {
   const accessToken = jwt.sign(
     { id: user._id },
     secretKey,
-    { expiresIn: '30m' } 
+    { expiresIn: '20m' } 
   )
 
   // Generate refresh token with a 5-hour expiry
   const refreshToken = jwt.sign(
     { id: user._id },
     secretKey,
-    { expiresIn: '3h' } 
+    { expiresIn: '1h' } 
   )
 
   return { accessToken, refreshToken }
@@ -24,8 +25,11 @@ const generateTokens = (user) => {
 
 
 const verifyToken = (req, res, next) => {
+  console.log('verifying token')
   // Extract token from cookies
-  const token = req.cookies.accessToken
+  const token = req.headers.authorization && req.headers.authorization.split(' ')[1]
+
+  console.log("Access:", token)
 
   // Handle missing token
   if (!token) {
@@ -37,7 +41,7 @@ const verifyToken = (req, res, next) => {
 
   // Handle missing secret key
   if (!secretKey) {
-    console.error("Missing secret key")
+    logger.error("Missing secret key")
     return res.status(500).send("Internal Server Error: Missing secret key")
   }
 
@@ -47,7 +51,7 @@ const verifyToken = (req, res, next) => {
 
     // Handle verification errors
     if (err) {
-      console.error(err)
+      logger.error(err)
 
       // Handle expired token
       if (err.name === 'TokenExpiredError') {
