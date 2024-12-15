@@ -16,6 +16,7 @@ const JobApplicants = () => {
       try {
         const response = await api.get(`/job/get-job-applicants/${jobId}`)
         if (response.status === 200) {
+          console.log(response.data.applicants)
           setApplicants(response.data.applicants)
         }
       } catch (error) {
@@ -59,7 +60,14 @@ const JobApplicants = () => {
           <div className="applicants-list">
             {applicants.map((applicant) => (
               <div key={applicant._id} className="applicant-card">
-                <h3 onClick={() => navigate(`/applicant-profile-page/${applicant._id}/${jobId}`)}>{applicant.applicantName}</h3>
+                <div className='applicant-details'>
+                  <img 
+                    src={ applicant?.applicantProfilePic ? applicant?.applicantProfilePic : "empty dp.jpg"}
+                    alt="Profile"
+                    className="profile-pic"
+                  />
+                  <h3 onClick={() => navigate(`/applicant-profile-page/${applicant._id}/${jobId}`)}>{applicant.applicantName}</h3>
+                </div>
                 <p><strong>Email:</strong> {applicant.applicantEmail}</p>
                 <p><strong>Resume:</strong> <a href={applicant.resumeLink} target="_blank" rel="noopener noreferrer">View Resume</a></p>
                 <p><strong>Cover Letter:</strong> {applicant.coverLetter}</p>
