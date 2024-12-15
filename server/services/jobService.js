@@ -106,7 +106,7 @@ class JobService {
       jobCategory = validator.escape(jobCategory)
 
       // Fetch jobs by category
-      const jobs = await Job.find({ type: jobCategory })
+      const jobs = await Job.find({ type: jobCategory }).populate('postedBy', 'email')
     
       // Check if jobs exist for the given category
       if (!jobs || jobs.length === 0) {
@@ -176,7 +176,7 @@ class JobService {
         throw { status: 400, message: 'Missing required fields' }
       }
 
-      const job = await Job.findById(jobId)
+      const job = await Job.findById(jobId).populate('postedBy', 'firstName middleName lastName email profilePic' )
 
       if (!job) {
         throw { status: 400, message: 'Error fetching job details: Job is not found'}
@@ -205,7 +205,7 @@ class JobService {
 
       // Fetch the applications associated with the job and populate applicant data
       const applications = await Application.find({ job: jobId })
-        .populate('applicant', '_id firstName middleName lastName email') // Populate user details (first name, middle name, last name, email)
+        .populate('applicant', '_id firstName middleName lastName email profilePic') // Populate user details (first name, middle name, last name, email)
         .exec()
 
       // If no applications are found
@@ -216,6 +216,7 @@ class JobService {
       // Map the applications to include relevant information
       const applicants = applications.map(application => ({
         _id: application.applicant._id,
+        applicantProfilePic: application.applicant.profilePic,
         applicantName: `${application.applicant.firstName} ${application.applicant.middleName} ${application.applicant.lastName}`,
         applicantEmail: application.applicant.email, // Include applicant email
         resumeLink: application.resumeLink,
