@@ -108,6 +108,18 @@ class UserController {
       next(error)
     }
   }
+
+  async getUserPostedJobs(req, res, next) {
+    try {
+      const { userId } = req.params
+      const jobsPosted = await UserService.getUserPostedJobs(userId)
+
+      res.status(200).json({ jobsPosted, message: 'Jobs fetched succesfully'})
+    } catch (error) {
+      logger.error(`Error getting user applied jobs - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 

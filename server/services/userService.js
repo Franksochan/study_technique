@@ -296,11 +296,7 @@ class UserService {
         throw { status: 404, message: 'User is not found' }
       }
 
-      const userApplications = await Application.find({ applicant: user._id });
-
-      if (!userApplications || userApplications.length === 0) {
-        throw { status: 200, message: 'User has no job applications' };
-      }
+      const userApplications = await Application.find({ applicant: user._id })
 
       // Extract job IDs from the user's applications
       const jobIds = userApplications.map(app => app.job)
@@ -309,6 +305,27 @@ class UserService {
       const jobsApplied = await Job.find({ _id: { $in: jobIds } })
 
       return jobsApplied
+    } catch (error){
+      throw new Error(error.message)
+    }
+  }
+
+  async getUserPostedJobs (userId) {
+    try {
+      const requiredParams = { userId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 404, message: 'User ID is required' }
+      }
+
+      const user = await User.findById(userId)
+      if (!user) {
+        throw { status: 404, message: 'User is not found' }
+      }
+
+      const userPostedJobs = await Job.find({ postedBy: user._id })
+
+      return userPostedJobs
     } catch (error){
       throw new Error(error.message)
     }
