@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import api from "../../../utils/api"
+import usePrivateApi from "../../../hooks/usePrivateApi"
 import "./AccountSettings.css"
 
 const AccountSettings = () => {
@@ -10,10 +10,11 @@ const AccountSettings = () => {
   const [newPasswordConfirmation, setNewPasswordConfirmation] = useState('')
   const [errorMsg, setErrorMsg] = useState(null)
   const userId = localStorage.getItem('userID')
+  const privateAxios = usePrivateApi()
 
   const handleChangePassword = async () => {
     try {
-      const response = await api.put(`/user/change-password/${userId}`, { currentPassword, newPassword, newPasswordConfirmation })
+      const response = await privateAxios.put(`/user/change-password/${userId}`, { currentPassword, newPassword, newPasswordConfirmation })
       
       if (response.status === 200) {
         alert(response.data.message)
