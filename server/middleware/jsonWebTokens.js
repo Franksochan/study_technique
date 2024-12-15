@@ -25,11 +25,8 @@ const generateTokens = (user) => {
 
 
 const verifyToken = (req, res, next) => {
-  console.log('verifying token')
   // Extract token from cookies
   const token = req.headers.authorization && req.headers.authorization.split(' ')[1]
-
-  console.log("Access:", token)
 
   // Handle missing token
   if (!token) {
