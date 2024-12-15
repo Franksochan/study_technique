@@ -7,7 +7,8 @@ import './JobApplicants.css'
 const JobApplicants = () => {
   const { jobId } = useParams()
   const [applicants, setApplicants] = useState([])
-  const [loading, setLoading] = useState({}) // Track loading state for each applicant
+  const [loading, setLoading] = useState({}) 
+  const [rejectLoading, setRejectLoading] = useState({}) 
   const navigate = useNavigate()
   const [showSidebar, setShowSidebar] = useState(false)
   const privateAxios = usePrivateApi()
@@ -30,7 +31,7 @@ const JobApplicants = () => {
 
   const handleOffer = async (applicantId) => {
     try {
-      setLoading(prevState => ({ ...prevState, [applicantId]: true })) // Set loading for the specific applicant
+      setLoading(prevState => ({ ...prevState, [applicantId]: true })) 
       const response = await privateAxios.post(`/application/offer-job/${jobId}/${applicantId}`)
       if (response.status === 200) {
         alert('Job offered successfully!')
@@ -47,6 +48,28 @@ const JobApplicants = () => {
       alert('Failed to offer the job. Please try again.')
     } finally {
       setLoading(prevState => ({ ...prevState, [applicantId]: false })) // Reset loading for the applicant
+    }
+  }
+
+  const handleReject = async (applicantId) => {
+    try {
+      setRejectLoading(prevState => ({ ...prevState, [applicantId]: true }))
+      const response = await privateAxios.delete(`/application/reject-job/${jobId}/${applicantId}`)
+      if (response.status === 200) {
+        alert('Application rejected successfully.')
+
+        setApplicants(prevApplicants =>
+          prevApplicants.map(applicant =>
+            applicant._id === applicantId
+              ? { ...applicant, status: 'Rejected' }
+              : applicant
+          )
+        )
+      }
+    } catch (error) {
+      alert('Failed to reject the application. Please try again.')
+    } finally {
+      setRejectLoading(prevState => ({ ...prevState, [applicantId]: false })) // Reset loading for the applicant
     }
   }
 
@@ -83,6 +106,13 @@ const JobApplicants = () => {
                       disabled={loading[applicant._id] || applicant.status === 'Offered'} // Disable if loading or already offered
                     >
                       {loading[applicant._id] ? 'Offering...' : 'Offer Opportunity'}
+                    </button>
+                    <button 
+                      className='reject-button' 
+                      onClick={() => handleReject(applicant._id)}
+                      disabled={loading[applicant._id]} // Disable if loading
+                    >
+                      {rejectLoading[applicant._id] ? 'Rejecting...' : 'Reject'}
                     </button>
                   </div>
                 )}
