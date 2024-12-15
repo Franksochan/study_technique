@@ -16,12 +16,27 @@
 .applicants-container h1 {
   font-size: 2rem;
   color: #1E1D1D;
+  margin-top: 30px;
 }
 
 .applicants-list {
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.applicant-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0;
+}
+
+.applicant-details .profile-pic {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
 }
 
 .applicant-card {
