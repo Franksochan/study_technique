@@ -58,7 +58,7 @@ const ApplicantProfilePage = () => {
     <div className="applicant-profile-page">
       <Sidebar />
       <div className="profile-container">
-        <button className="back-button" onClick={() => navigate(`/applicants/${jobId}`)}>
+        <button className="applicant-back-button" onClick={() => navigate(`/applicants/${jobId}`)}>
           Back To Applicants
         </button>
 
