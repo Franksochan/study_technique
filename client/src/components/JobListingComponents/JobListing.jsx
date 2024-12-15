@@ -162,7 +162,6 @@ const JobListing = () => {
               <button 
                 className="apply-btn" 
                 onClick={() => {
-                  console.log('Posted By:', job.postedBy, 'UserID:', userID);  // Debugging line
                   if (job.postedBy._id === userID) {
                     navigate(`/applicants/${job._id}`)
                   } else {
