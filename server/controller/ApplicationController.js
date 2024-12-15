@@ -28,6 +28,17 @@ class ApplicationController {
       next(error)
     }
   }
+
+  async rejectJob(req, res, next) {
+    try {
+      const { jobId, applicantId } = req.params
+      await ApplicationService.rejectJob(jobId, applicantId) 
+      res.status(200).json({ message: 'Rejected the applicant succesfully' })
+    } catch (error) {
+      logger.error(`Reject error - ${error.message}`)
+      next(error)
+    }
+  }
 }
 
 module.exports = new ApplicationController()

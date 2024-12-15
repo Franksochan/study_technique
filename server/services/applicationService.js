@@ -208,6 +208,56 @@ class ApplicationService {
       throw new Error(error.message)
     }
   }  
+
+  async rejectJob(jobId, applicantId, reason = "") {
+    try {
+      // Validate required parameters
+      const requiredParams = { jobId, applicantId }
+      const missingParams = findMissingParams(requiredParams)
+      if (missingParams) {
+        throw { status: 404, message: "Missing required parameters" }
+      }
+  
+      // Fetch the job
+      const job = await Job.findById(jobId)
+      if (!job) {
+        throw { status: 400, message: "Job is not found" }
+      }
+  
+      // Fetch the applicant
+      const applicant = await User.findById(applicantId)
+      if (!applicant) {
+        throw { status: 400, message: "Applicant is not found" }
+      }
+  
+      // Fetch the application
+      const application = await Application.findOne({ job: jobId, applicant: applicantId })
+      if (!application) {
+        throw { status: 400, message: "Application not found" }
+      }
+  
+      // Update the application status to 'rejected'
+      application.status = "rejected"
+      await application.save()
+  
+      // Notify the applicant about the rejection
+      const notification = new Notification({
+        user: applicant._id,
+        message: `We regret to inform you that your application for the job '${job.title}' has been rejected.${reason ? " Reason: " + reason : ""}`,
+        type: "alert",
+        date: new Date(),
+      })
+      const savedNotification = await notification.save()
+  
+      // Add the notification to the applicant's notifications array
+      applicant.notifications = applicant.notifications || []
+      applicant.notifications.push(savedNotification._id)
+      await applicant.save()
+    } catch (error) {
+      throw new Error(error.message)
+    }
+  }
+  
 }
 
 module.exports = new ApplicationService()
