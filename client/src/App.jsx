@@ -19,6 +19,7 @@ const PersistLogin = lazy(() => import('./components/PersistLogin'))
 const PostedJobsPage = lazy(() => import('./pages/postedJobs/PostedJobs'))
 const JobPosterProfile = lazy(() => import('./pages/jobPosterProfile/JobPosterProfile'))
 const HamsterWheel = lazy(() => import('./components/HamsterWheel/HamsterWheel'))
+const NotFoundPage = lazy(() => import('./pages/notFound/NotFound'))
 
 const App = () => {
   return (
@@ -43,6 +44,7 @@ const App = () => {
               <Route path='/applied-jobs/:userId' element={ <AppliedJobsPage />} />
               <Route path='/posted-jobs/:userId' element={ <PostedJobsPage />} />
             </Route>
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </Router>
