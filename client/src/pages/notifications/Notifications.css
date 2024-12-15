@@ -1,6 +1,8 @@
 .notification-page {
   display: flex;
   background-color: #f4f4f4;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
 }
 
 .notification-content {
@@ -14,7 +16,7 @@
 .notification-title {
   font-size: 2rem;
   color: #333;
-  margin-bottom: 20px;
+  margin-top: 48px;
 }
 
 .notification-list {

@@ -2,7 +2,7 @@
   display: flex;
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
-  color: #1E1D1D;
+  color: #333;
 }
 
 .applicants-container {
@@ -15,8 +15,8 @@
 
 .applicants-container h1 {
   font-size: 2rem;
-  color: #1E1D1D;
-  margin-top: 30px;
+  color: #333;
+  margin-top: 42px;
 }
 
 .applicants-list {

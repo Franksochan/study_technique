@@ -7,6 +7,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: white;
+  color: #333;
 }
 
 .login-page .lumikha-sign {
@@ -97,4 +99,29 @@
 .login-form button:hover {
   background-color: #393838; 
   transform: scale(1.05); 
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  padding-left: 30px; /* Add padding to make space for the icon */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.email-icon,
+.password-icon {
+  position: absolute;
+  left: 10px; /* Position the icon inside the input */
+  font-size: 24px;
+  color: #f9f9f9; /* Icon color */
+  margin-left: 3px;
+}
+
+.error-message {
+  color: rgb(178, 4, 4);
 }

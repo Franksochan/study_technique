@@ -2,7 +2,7 @@
   min-height: 100vh;
   min-width: 100%;
   font-family: 'Poppins', sans-serif;
-  color: #1E1D1D;  /* Color from your palette */
+  color: #333  /* Color from your palette */
 }
 
 .job-application-section {
@@ -24,8 +24,9 @@
 }
 
 .job-application-section header h1 {
+  margin-top: 12px;
   font-size: 2rem;
-  color: #1E1D1D; 
+  color: #333;
 }
 
 .job-application-section .back-button {
@@ -107,4 +108,12 @@
   color: red;
   font-size: 1rem;
   margin-bottom: 10px;
+}
+
+.job-poster-details {
+  cursor: pointer;
+}
+
+.job-poster-details:hover {
+  text-decoration: underline;
 }
