@@ -1,3 +1,4 @@
+/* Sidebar Styles */
 .sidebar.collapsed {
   position: fixed; 
   left: 0;
@@ -11,13 +12,12 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 80px;  
-  background-color: #333;
   width: 250px;
+  background-color: #333;
   color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   height: 100%;
   box-shadow: 4px 0 12px rgba(0, 0, 0, 0.2), 2px 0 4px rgba(0, 0, 0, 0.1);
@@ -25,39 +25,60 @@
   transition: all 0.3s ease-in-out;
 }
 
+/* Profile Section */
 .profile-section {
   text-align: center;
-  margin-bottom: 30px;
-  cursor: pointer;  /* Add cursor pointer to indicate clickability */
+  margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .profile-icon {
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
 }
 
-.profile-name {
+.profile-section h3 {
   margin-top: 6px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
+  color: white;
 }
 
+/* Sidebar Menu */
 .sidebar-menu ul {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .sidebar-menu li {
-  margin: 15px 0;
+  margin: 20px 0;
 }
 
 .sidebar-menu a {
+  display: flex;
+  align-items: center;
   text-decoration: none;
   color: white;
-  font-size: 1rem;
-  transition: color 0.3s;
+  font-size: 1.2rem; 
+  transition: color 0.3s, transform 0.3s ease-in-out;
+  padding: 10px;
 }
 
 .sidebar-menu a:hover {
   color: #ddd;
-} 
+  transform: translateX(10px); 
+}
+
+.sidebar-menu a svg {
+  margin-right: 15px; 
+  font-size: 1.5rem; 
+}
+
+.sidebar-menu li:first-child {
+  margin-top: 40px;
+}
+
+.sidebar-menu a:hover svg {
+  color: #ddd;
+}
